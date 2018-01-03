@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+flask = "*"
+"flask-sqlalchemy" = "*"
+sqlalchemy = "*"
+"flask-limiter" = "*"
+"flask-login" = "*"
+bcrypt = "*"
+"flask-wtf" = "*"
+celery = "*"
+"celery-redbeat" = "*"
+twisted = "*"
+redis = "*"
+amqp = "*"
+
+
+[dev-packages]
+
+pytest = "*"
+"pytest-flask" = "*"
+alembic = "*"
+codecov = "*"
+coverage = "*"

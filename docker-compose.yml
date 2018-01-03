@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:9.6
+    ports:
+      - '5433:5432'
+
+  redis:
+    image: redis:latest
+
+  rabbitmq:
+    image: rabbitmq:latest
+
+  elasticsearch:
+    image: elasticsearch:5
+
+  web:
+    build:
+      context: .
+    ports:
+      - '80:8080'
+    links:
+      - db
+      - redis
+      - rabbitmq
+      - elasticsearch
+
+  worker:
+    build:
+      context: .
+    command: celery -A armonaut worker -B -S redbeat.RedBeatScheduler -l info
+    links:
+      - db
+      - redis
+      - rabbitmq
+      - elasticsearch
+      - smtp
+
+  smtp:
+    build:
+      context: .
+    ports:
+      - '2525:2525'
+    volumes:
+      - ./dev/smtp.py:/opt/warehouse/dev/smtp.py

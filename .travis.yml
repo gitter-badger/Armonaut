@@ -1,0 +1,29 @@
+sudo: required
+language: python
+python: 3.6-dev
+
+services:
+  - postgresql
+  - redis-server
+  - rabbitmq
+
+env:
+  global:
+    - APP_SETTINGS=config.TestingConfig
+    - SECRET_KEY=travisci
+    - DATABASE_URL=
+    - REDIS_URL=
+
+
+before_install:
+  - psql -c 'create database armonaut;' -U postgres
+
+install:
+  - python -m pip install pipenv
+  - pipenv install --dev
+
+script:
+  - pytest tests/
+
+after_success:
+  - codecov
