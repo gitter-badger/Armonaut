@@ -40,6 +40,14 @@ class JsonableModel(Model):
 
 
 def create_app(config: typing.Optional[str]=None) -> Flask:
+    """
+    Creates a new Flask web application object with
+    all configurations and routes loaded.
+
+    :param typing.Optional[str] config:
+    :rtype: Flask
+    :return: The newly created application
+    """
     app = Flask(__name__)
 
     if config is None:
@@ -57,5 +65,13 @@ def create_app(config: typing.Optional[str]=None) -> Flask:
 
 
 def register_blueprints(app: Flask):
-    from armonaut.auth import auth_blueprint
+    """
+    Loads and registers all Blueprints to the application
+
+    :param Flask app: Application to call register_blueprint() on
+    """
+    from armonaut.auth.views import auth_blueprint
+    from armonaut.webhooks.views import webhooks_blueprint
+
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(webhooks_blueprint)

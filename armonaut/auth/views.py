@@ -14,7 +14,9 @@
 
 from flask import redirect, url_for, request
 from flask_login import current_user, logout_user
-from armonaut.auth import auth_blueprint
+from flask import Blueprint
+
+auth_blueprint = Blueprint('auth', __name__, url_prefix='/')
 
 
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
