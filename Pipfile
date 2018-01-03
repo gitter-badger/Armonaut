@@ -1,28 +1,32 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+
 [packages]
 
 flask = "*"
-"flask-sqlalchemy" = "*"
+flask-sqlalchemy = "*"
 sqlalchemy = "*"
-"flask-limiter" = "*"
-"flask-login" = "*"
+flask-limiter = "*"
+flask-login = "*"
 bcrypt = "*"
-"flask-wtf" = "*"
+flask-wtf = "*"
 celery = "*"
-"celery-redbeat" = "*"
+celery-redbeat = "*"
 twisted = "*"
 redis = "*"
 amqp = "*"
+limits = "*"
 
 
 [dev-packages]
 
 pytest = "*"
-"pytest-flask" = "*"
+pytest-flask = "*"
 alembic = "*"
 codecov = "*"
 coverage = "*"
+tox = "*"

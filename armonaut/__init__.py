@@ -15,7 +15,6 @@
 import os
 import typing
 import sqlalchemy
-from sqlalchemy.dialects.postgresql import UUID
 from flask import Flask
 from flask_wtf import CSRFProtect
 from flask_login import LoginManager
@@ -32,11 +31,12 @@ login = LoginManager()
 class Model(db.Model):
     __abstract__ = True
 
-    id = sqlalchemy.Column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        server_default=sqlalchemy.text('gen_random_uuid()')
-    )
+    id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
+
+
+class JsonableModel(Model):
+    def to_json(self):
+        raise NotImplementedError()
 
 
 def create_app(config: typing.Optional[str]=None) -> Flask:

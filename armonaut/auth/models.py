@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut import Model, login
+from armonaut import Model, login, db
 from flask_login import UserMixin
 from sqlalchemy import Column, String, text
 from sqlalchemy.dialects.postgresql import UUID
@@ -27,6 +27,11 @@ class User(Model, UserMixin):
         server_default=text('gen_random_uuid()'),
         index=True
     )
+
+    def refresh_api_token(self):
+        db.session.add(self)
+        self.api_token = text('gen_random_uuid()')
+        db.session.commit()
 
 
 @login.user_loader
