@@ -32,11 +32,15 @@ class BaseConfig(object):
     CELERY_BROKER_URL = RABBITMQ_URL
     CELERY_RESULT_BACKEND = REDIS_URL
 
+    CACHE_CONTROL_ENABLED = True
+    FASTLY_ENABLED = True
+
 
 class DevelopmentConfig(BaseConfig):
     PORT = 8080
     DEBUG = True
     RATELIMIT_ENABLED = False
+    FASTLY_ENABLED = False
 
 
 class ProductionConfig(BaseConfig):
