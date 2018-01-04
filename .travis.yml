@@ -13,7 +13,10 @@ env:
     - SECRET_KEY=travisci
     - DATABASE_URL=
     - REDIS_URL=
-
+    - AMQP_URL=://
+  matrix:
+    - SCRIPT=lint
+    - SCRIPT=unit
 
 before_install:
   - psql -c 'create database armonaut;' -U postgres
@@ -23,7 +26,15 @@ install:
   - pipenv install --dev
 
 script:
-  - pytest tests/
+  - |
+    if [ "$SCRIPT" == "unit" ]; then
+      pytest tests/
+    elif [ "$SCRIPT" == "lint" ]; then
+      flake8 armonaut/
+    fi
 
 after_success:
-  - codecov
+  - |
+    if [ "$SCRIPT" != "lint" ]; then
+      codecov
+    fi

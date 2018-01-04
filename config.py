@@ -27,13 +27,12 @@ class BaseConfig(object):
 
     RATELIMIT_ENABLED = True
     RATELIMIT_STORAGE_URL = REDIS_URL
-    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'
 
     CELERY_BROKER_URL = RABBITMQ_URL
     CELERY_RESULT_BACKEND = REDIS_URL
 
-    CACHE_CONTROL_ENABLED = True
-    FASTLY_ENABLED = True
+    CACHE_HTTP_ENABLED = True
+    CACHE_FASTLY_ENABLED = True
 
 
 class DevelopmentConfig(BaseConfig):

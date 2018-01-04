@@ -19,7 +19,9 @@ from wtforms.fields.html5 import EmailField
 class RegisterForm(Form):
     email = EmailField(
         'Email Address',
-        [validators.DataRequired(), validators.Email(), validators.Length(min=4, max=96)]
+        [validators.DataRequired(),
+         validators.Email(),
+         validators.Length(min=4, max=96)]
     )
     password = PasswordField(
         'Password',
@@ -30,13 +32,18 @@ class RegisterForm(Form):
         [validators.DataRequired(),
          validators.EqualTo('password', message='Passwords do not match.')]
     )
-    accept_tos = BooleanField('I accept the Terms and Services', [validators.DataRequired()])
+    accept_tos = BooleanField(
+        'I accept the Terms and Services',
+        [validators.DataRequired()]
+    )
 
 
 class LoginForm(Form):
     email = EmailField(
         'Email Address',
-        [validators.DataRequired(), validators.Email(), validators.Length(min=4, max=96)]
+        [validators.DataRequired(),
+         validators.Email(),
+         validators.Length(min=4, max=96)]
     )
     password = PasswordField(
         'Password',

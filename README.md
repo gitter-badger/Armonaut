@@ -3,7 +3,7 @@
 ## Technology
 
 - Heroku
-- Flask
+- Pyramid
 - Celery
 - PostgreSQL
 - Redis

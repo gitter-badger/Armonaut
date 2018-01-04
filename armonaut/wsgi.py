@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut import create_app
-app = create_app()
+from armonaut.config import configure
+app = configure().make_wsgi_app()

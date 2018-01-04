@@ -7,26 +7,24 @@ name = "pypi"
 
 [packages]
 
-flask = "*"
-flask-sqlalchemy = "*"
 sqlalchemy = "*"
-flask-limiter = "*"
-flask-login = "*"
 bcrypt = "*"
-flask-wtf = "*"
 celery = "*"
 celery-redbeat = "*"
-twisted = "*"
 redis = "*"
 amqp = "*"
 limits = "*"
+first = "*"
+pyramid = "*"
+pyramid-services = "*"
+meinheld = "*"
 
 
 [dev-packages]
 
 pytest = "*"
-pytest-flask = "*"
 alembic = "*"
 codecov = "*"
 coverage = "*"
 tox = "*"
+"flake8" = "*"

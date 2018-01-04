@@ -12,20 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Request
-from armonaut.celery import celery
-
-
-@celery.task(ignore_result=True)
-def process_github_webhook(request: Request):
-    raise NotImplementedError()
-
-
-@celery.task(ignore_result=True)
-def process_gitlab_webhook(request: Request):
-    raise NotImplementedError()
-
-
-@celery.task(ignore_result=True)
-def process_bitbucket_webhook(request: Request):
-    raise NotImplementedError()
+__title__ = 'armonaut'
+__version__ = '1.0.0b1'
+__author__ = 'Seth Michael Larson'
+__license__ = 'Apache-2.0'

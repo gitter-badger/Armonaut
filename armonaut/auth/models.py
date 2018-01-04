@@ -12,28 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut import Model, login, db
-from flask_login import UserMixin
-from sqlalchemy import Column, String, text
+from armonaut import Model
+from sqlalchemy import Column, String, DateTime, text
 from sqlalchemy.dialects.postgresql import UUID
 
 
-class User(Model, UserMixin):
+class User(Model):
     email = Column(String(96), nullable=False, index=True)
     password = Column(String(60), nullable=False)
+
+    email_verify_code = Column(String(8), default=None)
+    email_verify_expires = Column(DateTime, default=None)
 
     api_token = Column(
         UUID(as_uuid=True),
         server_default=text('gen_random_uuid()'),
         index=True
     )
-
-    def refresh_api_token(self):
-        db.session.add(self)
-        self.api_token = text('gen_random_uuid()')
-        db.session.commit()
-
-
-@login.user_loader
-def load_user(user_id):
-    return User.get(user_id)
