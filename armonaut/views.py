@@ -14,6 +14,7 @@
 
 
 from pyramid.view import view_config
+from armonaut import tasks
 
 
 @view_config(

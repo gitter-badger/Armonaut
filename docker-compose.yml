@@ -26,6 +26,8 @@ services:
   worker:
     build:
       context: .
+    environment:
+      C_FORCE_ROOT: '1'
     command: celery -A armonaut.celery.app worker -B -S redbeat.RedBeatScheduler -l info
     links:
       - db

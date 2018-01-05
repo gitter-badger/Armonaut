@@ -22,6 +22,9 @@ import celery
 import celery.app.backends
 import celery.backends.redis
 import pyramid
+import pyramid.scripting
+import transaction
+import pyramid_retry
 from pyramid.threadlocal import get_current_request
 
 
@@ -42,7 +45,7 @@ class ArmonautTask(celery.Task):
             with request.tm:
                 try:
                     return original_run(*args, **kwargs)
-                except BaseException as exc:
+                except Exception as exc:
                     if (isinstance(exc, pyramid_retry.RetryableException) or
                             pyramid_retry.IRetryableError.providedBy(exc)):
                         raise obj.retry(exc=exc)

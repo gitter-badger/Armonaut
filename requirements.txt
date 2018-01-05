@@ -9,7 +9,7 @@ first
 pyramid
 pyramid-services
 pyramid-retry
-pyramid-tm
+pyramid-tm>=1.1.1,<2.0.0
 gunicorn
 pyramid-jinja2
 wtforms

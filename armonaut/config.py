@@ -94,6 +94,7 @@ def configure(settings=None) -> Configurator:
         config.add_jinja2_search_path('armonaut:templates', name=jinja2_renderer)
 
     # Setup our transaction manager before the database
+    config.include('pyramid_retry')
     config.add_settings({
         'tm.attempts': 3,
         'tm.manager_hook': lambda request: transaction.TransactionManager(),

@@ -9,7 +9,7 @@ services:
 
 env:
   global:
-    - APP_SETTINGS=config.TestingConfig
+    - APP_SETTINGS=config.DevelopmentConfig
     - SECRET_KEY=travisci
     - DATABASE_URL=
     - REDIS_URL=
