@@ -21,8 +21,8 @@ import venusian
 import celery
 import celery.app.backends
 import celery.backends.redis
+import pyramid
 from pyramid.threadlocal import get_current_request
-from armonaut.config import PRODUCTION
 
 
 class ArmonautTask(celery.Task):

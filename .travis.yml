@@ -22,8 +22,7 @@ before_install:
   - psql -c 'create database armonaut;' -U postgres
 
 install:
-  - python -m pip install pipenv
-  - pipenv install --dev
+  - python -m pip install -r requirements.txt -r dev-requirements.txt
 
 script:
   - |

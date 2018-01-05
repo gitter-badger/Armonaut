@@ -14,6 +14,7 @@
 
 import os
 import typing
+import transaction
 from pyramid.response import Response
 from pyramid.config import Configurator
 
@@ -56,12 +57,20 @@ def maybe_set(settings: typing.Dict[str, typing.Any],
         raise RuntimeError(f'Could not get a value for `{name}` setting.')
 
 
+def _tm_activate_hook(request):
+    # Don't activate our transaction manager on the debug toolbar
+    # or on static resources
+    if request.path.startswith(('/_debug_toolbar', '/static')):
+        return False
+    return True
+
+
 def configure(settings=None) -> Configurator:
     if settings is None:
         settings = {}
 
     # Gather all settings from the environment
-    maybe_set(settings, 'armonaut.env', 'ARMONUAT_ENV')
+    maybe_set(settings, 'armonaut.env', 'ARMONAUT_ENV')
     maybe_set(settings, 'celery.broker_url', 'AMQP_URL')
     maybe_set(settings, 'celery.result_url', 'REDIS_URL')
     maybe_set(settings, 'celery.scheduler_url', 'REDIS_URL')
@@ -83,6 +92,21 @@ def configure(settings=None) -> Configurator:
     for jinja2_renderer in ['.html']:
         config.add_jinja2_renderer(jinja2_renderer)
         config.add_jinja2_search_path('armonaut:templates', name=jinja2_renderer)
+
+    # Setup our transaction manager before the database
+    config.add_settings({
+        'tm.attempts': 3,
+        'tm.manager_hook': lambda request: transaction.TransactionManager(),
+        'tm.activate_hook': _tm_activate_hook,
+        'tm.annotate_user': False
+    })
+    config.include('pyramid_tm')
+
+    # Register support for database connections
+    config.include('.db')
+
+    # Register support for celery tasks
+    config.include('.tasks')
 
     # Block non-HTTPS in production
     config.add_tween('armonaut.config.require_https_tween_factory')

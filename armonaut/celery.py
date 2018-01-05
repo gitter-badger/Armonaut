@@ -12,22 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut.db import Model
-from sqlalchemy import Column, String, DateTime, text
-from sqlalchemy.dialects.postgresql import UUID
-
-
-class User(Model):
-    __tablename__ = 'users'
-
-    email = Column(String(96), nullable=False, index=True)
-    password = Column(String(60), nullable=False)
-
-    email_verify_code = Column(String(8), default=None)
-    email_verify_expires = Column(DateTime, default=None)
-
-    api_token = Column(
-        UUID(as_uuid=True),
-        server_default=text('gen_random_uuid()'),
-        index=True
-    )
+from armonaut.config import configure
+app = configure().make_celery_app()
