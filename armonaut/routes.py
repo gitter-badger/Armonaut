@@ -12,20 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
 
-
-class _ModelBase(object):
-    pass
-
-
-metadata = sqlalchemy.MetaData()
-
-ModelBase = declarative_base(cls=_ModelBase, metadata=metadata)
-
-
-class Model(ModelBase):
-    __abstract__ = True
-
-    id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
+def includeme(config):
+    config.add_route('index', '/')

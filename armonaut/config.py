@@ -23,7 +23,7 @@ DEVELOPMENT = 'development'
 
 
 def require_https_tween_factory(handler, registry):
-    if not registry.settings.get('enforce_https', True):
+    if not registry.settings.get('armonaut.require_https', True):
         return handler
 
     def require_https_tween(request):
@@ -69,10 +69,10 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'ratelimit.url', 'REDIS_URL')
 
-    if settings['armonaut.env'] == PRODUCTION:
-
-    else:
-
+    # If we're running production then require HTTPS
+    # and HTTP is fine for development
+    settings.setdefault('armonaut.require_https',
+                        settings.get('armonaut.env') == PRODUCTION)
 
     config = Configurator(settings=settings)
 
@@ -93,7 +93,11 @@ def configure(settings=None) -> Configurator:
     # Scan everything for additional configuration
     config.scan(ignore=['armonaut.migrations.env',
                         'armonaut.celery',
+                        'armonaut.routes',
                         'armonaut.wsgi'])
+
+    # Load routes last to ensure all views are loaded first
+    config.include('.routes')
     config.commit()
 
     return config

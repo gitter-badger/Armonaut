@@ -18,6 +18,8 @@ from sqlalchemy.dialects.postgresql import UUID
 
 
 class User(Model):
+    __tablename__ = 'users'
+
     email = Column(String(96), nullable=False, index=True)
     password = Column(String(60), nullable=False)
 

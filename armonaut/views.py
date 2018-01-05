@@ -12,20 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
+
+from pyramid.view import view_config
 
 
-class _ModelBase(object):
-    pass
-
-
-metadata = sqlalchemy.MetaData()
-
-ModelBase = declarative_base(cls=_ModelBase, metadata=metadata)
-
-
-class Model(ModelBase):
-    __abstract__ = True
-
-    id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
+@view_config(
+    route_name='index',
+    renderer='parent.html',
+)
+def index(request):
+    return {}

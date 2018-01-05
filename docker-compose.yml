@@ -12,9 +12,6 @@ services:
   rabbitmq:
     image: rabbitmq:latest
 
-  elasticsearch:
-    image: elasticsearch:5
-
   web:
     build:
       context: .
@@ -24,7 +21,6 @@ services:
       - db
       - redis
       - rabbitmq
-      - elasticsearch
 
   worker:
     build:
@@ -34,13 +30,3 @@ services:
       - db
       - redis
       - rabbitmq
-      - elasticsearch
-      - smtp
-
-  smtp:
-    build:
-      context: .
-    ports:
-      - '2525:2525'
-    volumes:
-      - ./dev/smtp.py:/opt/warehouse/dev/smtp.py

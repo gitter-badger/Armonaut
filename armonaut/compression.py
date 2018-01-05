@@ -54,6 +54,7 @@ def _compressor(request, response):
         response.encode_content(encoding=target_encoding, lazy=True)
         response.content_length = None
 
+        # Recalculate the ETag header after encoding.
         if response.etag is not None:
             md5_digest = hashlib.md5((response.etag + ';gzip').encode('utf8'))
             md5_digest = md5_digest.digest()
@@ -64,9 +65,11 @@ def _compressor(request, response):
         original_length = len(response.body)
         response.encode_content(encoding=target_encoding, lazy=False)
 
+        # Compression didn't make a shorter response so undo everything we did.
         if original_length < len(response.body):
             response.decode_content()
 
+        # Calculate an MD5 ETag header
         if response.content_encoding is not None:
             response.md5_etag()
 

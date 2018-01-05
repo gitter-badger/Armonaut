@@ -12,20 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
+from waitress import serve
+from armonaut.config import configure
 
-
-class _ModelBase(object):
-    pass
-
-
-metadata = sqlalchemy.MetaData()
-
-ModelBase = declarative_base(cls=_ModelBase, metadata=metadata)
-
-
-class Model(ModelBase):
-    __abstract__ = True
-
-    id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
+app = configure().make_wsgi_app()
+serve(app, host='0.0.0.0', port=8080)

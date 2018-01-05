@@ -1,2 +1,2 @@
-web: python -m twisted web -n -p tcp:port=$PORT --wsgi app.wsgi.app
+web: gunicorn -bind 0.0.0.0:8080 armonaut.wsgi:app
 worker: celery worker -A armonaut.worker.celery -B -S redbeat.RedBeatScheduler -l info
