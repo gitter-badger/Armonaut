@@ -21,6 +21,7 @@ from first import first
 from datetime import datetime, timezone, timedelta
 from limits import parse_many
 from limits.strategies import MovingWindowRateLimiter
+from limits.storage import storage_from_string
 
 
 class RateLimiter(object):
@@ -66,3 +67,23 @@ class RateLimiter(object):
             resets.append(reset - current)
 
         return first(sorted(resets))
+
+
+class RateLimit(object):
+    def __init__(self, limit, identifiers=None, limiter_class=RateLimiter):
+        self.limit = limit
+        self.identifiers = identifiers
+        self.limiter_class = limiter_class
+
+    def __call__(self, context, request):
+        return self.limiter_class(
+            request.registry['ratelimit.storage'],
+            self.limit,
+            self.identifiers
+        )
+
+
+def includeme(config):
+    config.registry['ratelimit.storage'] = storage_from_string(
+        config.registry.settings['ratelimit.url']
+    )

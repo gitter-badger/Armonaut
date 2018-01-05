@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import enum
 import os
 import typing
 import transaction
@@ -19,8 +20,9 @@ from pyramid.response import Response
 from pyramid.config import Configurator
 
 
-PRODUCTION = 'production'
-DEVELOPMENT = 'development'
+class Environment(enum.Enum):
+    PRODUCTION = 'production'
+    DEVELOPMENT = 'development'
 
 
 def require_https_tween_factory(handler, registry):
@@ -70,7 +72,10 @@ def configure(settings=None) -> Configurator:
         settings = {}
 
     # Gather all settings from the environment
-    maybe_set(settings, 'armonaut.env', 'ARMONAUT_ENV')
+    maybe_set(settings, 'armonaut.env', 'ARMONAUT_ENV',
+              coercer=Environment,
+              default=Environment.PRODUCTION)
+
     maybe_set(settings, 'celery.broker_url', 'AMQP_URL')
     maybe_set(settings, 'celery.result_url', 'REDIS_URL')
     maybe_set(settings, 'celery.scheduler_url', 'REDIS_URL')
@@ -79,7 +84,7 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'ratelimit.url', 'REDIS_URL')
 
     # Setup our development environment
-    if settings['armonaut.env'] == DEVELOPMENT:
+    if settings['armonaut.env'] == Environment.DEVELOPMENT:
         settings.setdefault('armonaut.require_https', False)
         settings.setdefault('pyramid.reload_assets', True)
         settings.setdefault('pyramid.reload_templates', True)
@@ -108,7 +113,7 @@ def configure(settings=None) -> Configurator:
     config = Configurator(settings=settings)
 
     # Add the Pyramid debugtoolbar for development debugging
-    if config.registry.settings['armonaut.env'] == DEVELOPMENT:
+    if config.registry.settings['armonaut.env'] == Environment.DEVELOPMENT:
         config.include('pyramid_debugtoolbar')
 
     # Configure Jinja2 as our template renderer
@@ -134,6 +139,9 @@ def configure(settings=None) -> Configurator:
 
     # Register support for celery tasks
     config.include('.tasks')
+
+    # Register support for rate-limiting
+    config.include('.rate_limit')
 
     # Block non-HTTPS in production
     config.add_tween('armonaut.config.require_https_tween_factory')

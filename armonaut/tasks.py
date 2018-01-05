@@ -28,7 +28,7 @@ import pyramid_retry
 from pyramid.threadlocal import get_current_request
 
 
-class ArmonautTask(celery.Task):
+class _Task(celery.Task):
     def __new__(cls, *args, **kwargs):
         obj = super().__new__(cls, *args, **kwargs)
         if getattr(obj, "__header__", None) is not None:
@@ -166,7 +166,7 @@ def includeme(config):
         worker_disable_rate_limits=True,
         REDBEAT_REDIS_URL=settings['celery.scheduler_url']
     )
-    config.registry['celery.app'].Task = ArmonautTask
+    config.registry['celery.app'].Task = _Task
     config.registry['celery.app'].pyramid_config = config
 
     config.action(('celery', 'finalize'), config.registry['celery.app'].finalize)
