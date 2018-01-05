@@ -47,7 +47,7 @@ def _compressor(request, response):
     # content buffer the stream in memory
     if (streaming and response.content_length is not None and
             response.content_length <= BUFFER_MAX):
-        _ = response.body  # Access the body attribute to collapse the stream
+        _ = response.body  # noqa: Access the body attribute to collapse the stream
         streaming = False
 
     if streaming:

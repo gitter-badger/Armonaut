@@ -16,8 +16,8 @@ RUN apt-get update && \
 # to change compared to our code to try to skip reinstalling
 # requirements whenever we change our code.
 WORKDIR /opt/armonaut
-ADD ./requirements.txt /opt/armonaut/requirements.txt
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt dev-requirements.txt /opt/armonaut/
+RUN python3 -m pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
 
 # Setup environment variables which may be added to.
 ENV ARMONAUT_ENV=development

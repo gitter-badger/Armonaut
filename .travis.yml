@@ -9,7 +9,7 @@ services:
 
 env:
   global:
-    - APP_SETTINGS=config.DevelopmentConfig
+    - ARMONAUT_ENV=development
     - SECRET_KEY=travisci
     - DATABASE_URL=
     - REDIS_URL=
@@ -29,7 +29,7 @@ script:
     if [ "$SCRIPT" == "unit" ]; then
       pytest tests/
     elif [ "$SCRIPT" == "lint" ]; then
-      flake8 armonaut/
+      flake8 armonaut/ --max-line-length=99
     fi
 
 after_success:

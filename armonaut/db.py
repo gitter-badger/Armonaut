@@ -109,7 +109,11 @@ def _create_session(request) -> sqlalchemy.orm.Session:
     the database is set in read-only mode as well for security.
     """
     connection = request.registry['sqlalchemy.engine'].connect()
-    if connection.connection.get_transaction_status() != psycopg2.extensions.TRANSACTION_STATUS_IDLE:
+
+    # Issue where sometimes the first connection errors so we want
+    # to discard that first connection if it's not idle.
+    if (connection.connection.get_transaction_status() !=
+            psycopg2.extensions.TRANSACTION_STATUS_IDLE):
         connection.connection.rollback()
 
     # If we receive a read-only request then we can set

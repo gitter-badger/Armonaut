@@ -3,5 +3,4 @@ codecov
 coverage
 tox
 flake8
-waitress
 pyramid-debugtoolbar

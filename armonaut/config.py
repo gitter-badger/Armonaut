@@ -53,11 +53,11 @@ def maybe_set(settings: typing.Dict[str, typing.Any],
         settings.setdefault(name, value)
     elif default is not None:
         settings.setdefault(name, default)
-    else:
+    if name not in settings:
         raise RuntimeError(f'Could not get a value for `{name}` setting.')
 
 
-def _tm_activate_hook(request):
+def _tm_activate_hook(request) -> bool:
     # Don't activate our transaction manager on the debug toolbar
     # or on static resources
     if request.path.startswith(('/_debug_toolbar', '/static')):
@@ -78,12 +78,38 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'ratelimit.url', 'REDIS_URL')
 
-    # If we're running production then require HTTPS
-    # and HTTP is fine for development
-    settings.setdefault('armonaut.require_https',
-                        settings.get('armonaut.env') == PRODUCTION)
+    # Setup our development environment
+    if settings['armonaut.env'] == DEVELOPMENT:
+        settings.setdefault('armonaut.require_https', False)
+        settings.setdefault('pyramid.reload_assets', True)
+        settings.setdefault('pyramid.reload_templates', True)
+        settings.setdefault('pyramid.prevent_http_cache', True)
+        settings.setdefault('debugtoolbar.hosts', ['0.0.0.0/0'])
+        settings.setdefault(
+            'debugtoolbar.panels',
+            [f'pyramid_debugtoolbar.panels.{panel}'
+                for panel in [
+                    'versions.VersionDebugPanel',
+                    'settings.SettingsDebugPanel',
+                    'headers.HeaderDebugPanel',
+                    'request_vars.RequestVarsDebugPanel',
+                    'renderings.RenderingsDebugPanel',
+                    'logger.LoggingPanel',
+                    'performance.PerformanceDebugPanel',
+                    'routes.RoutesDebugPanel',
+                    'sqla.SQLADebugPanel',
+                    'tweens.TweensDebugPanel',
+                    'introspection.IntrospectionDebugPanel'
+                ]
+             ]
+        )
 
+    # Create a configuration from the settings
     config = Configurator(settings=settings)
+
+    # Add the Pyramid debugtoolbar for development debugging
+    if config.registry.settings['armonaut.env'] == DEVELOPMENT:
+        config.include('pyramid_debugtoolbar')
 
     # Configure Jinja2 as our template renderer
     config.include('pyramid_jinja2')
