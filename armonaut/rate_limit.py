@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This file is almost entirely based on Warehouse's Celery implementation
-# which can be found at https://github.com/pypa/warehouse/warehouse/rate_limiting.py
-# and is licensed under Apache-2.0
-
 import typing
 from first import first
 from datetime import datetime, timezone, timedelta

@@ -17,6 +17,7 @@ env:
   matrix:
     - SCRIPT=lint
     - SCRIPT=unit
+    - SCRIPT=integration
 
 before_install:
   - psql -c 'create database armonaut;' -U postgres
@@ -27,7 +28,9 @@ install:
 script:
   - |
     if [ "$SCRIPT" == "unit" ]; then
-      pytest tests/
+      pytest tests/unit/
+    elif [ "$SCRIPT" == "integration" ]; then
+      pytest tests/integration/
     elif [ "$SCRIPT" == "lint" ]; then
       flake8 armonaut/ --max-line-length=99
     fi

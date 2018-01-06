@@ -6,3 +6,4 @@ tox
 flake8
 pyramid-debugtoolbar
 webtest
+pytest-cov
