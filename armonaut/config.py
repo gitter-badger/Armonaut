@@ -73,7 +73,7 @@ def configure(settings=None) -> Configurator:
 
     # Gather all settings from the environment
     maybe_set(settings, 'armonaut.env', 'ARMONAUT_ENV',
-              coercer=Environment,
+              coercer=lambda x: Environment(x.lower()),
               default=Environment.PRODUCTION)
 
     maybe_set(settings, 'celery.broker_url', 'AMQP_URL')

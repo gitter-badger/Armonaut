@@ -23,7 +23,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements.txt -r dev-requirement
 ENV ARMONAUT_ENV=development
 ENV REDIS_URL=redis://redis:6379/0
 ENV AMQP_URL=amqp://guest@rabbitmq:5672//
-ENV DATABASE_URL=postgresql://postgres@db/armonaut
+ENV DATABASE_URL=postgresql://postgres@database:5432/armonaut
 
 # Finally add all our code to the image which will change often.
 ADD . /opt/armonaut

@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  db:
+  database:
     image: postgres:9.6
-    ports:
-      - '5433:5432'
+    environment:
+      POSTGRES_DB: armonaut
 
   redis:
     image: redis:latest
@@ -19,7 +19,7 @@ services:
     ports:
       - '80:8080'
     links:
-      - db
+      - database
       - redis
       - rabbitmq
 
@@ -30,6 +30,6 @@ services:
       C_FORCE_ROOT: '1'
     command: celery -A armonaut.celery.app worker -B -S redbeat.RedBeatScheduler -l info
     links:
-      - db
+      - database
       - redis
       - rabbitmq

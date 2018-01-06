@@ -1,6 +1,8 @@
 pytest
+pytest-postgresql
 codecov
 coverage
 tox
 flake8
 pyramid-debugtoolbar
+webtest

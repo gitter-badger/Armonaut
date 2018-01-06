@@ -1,0 +1,11 @@
+[run]
+branch = True
+
+source =
+    armonaut
+
+omit =
+    armonaut/__about__.py
+    armonaut/wsgi.py
+    armonaut/celery.py
+    armonaut/migrations/*
