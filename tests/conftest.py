@@ -14,7 +14,7 @@
 
 import pytest
 from alembic import command
-from armonaut.config import configure
+from armonaut.config import configure, Environment
 from armonaut.db import Session as _Session
 from sqlalchemy import event
 from sqlalchemy.orm import scoped_session
@@ -54,7 +54,7 @@ def database(request):
 @pytest.fixture
 def app_config(database):
     config = configure({
-        'armonaut.env': 'development',
+        'armonaut.env': Environment.DEVELOPMENT,
         'database.url': database
     })
 

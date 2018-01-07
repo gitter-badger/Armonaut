@@ -1,6 +1,5 @@
 alembic
 argon2-cffi
-bcrypt
 click
 celery
 celery-redbeat
@@ -21,3 +20,4 @@ zope.interface
 zope.sqlalchemy
 msgpack-python
 passlib
+pyramid-mailer

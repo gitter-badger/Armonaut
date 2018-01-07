@@ -6,6 +6,6 @@ def test_index(webtest):
 
 
 def test_not_found(webtest):
-    resp = webtest.get('/asdasdasd')
+    resp = webtest.get('/asdasdasd/', status=404)
 
     assert resp.status_code == 404

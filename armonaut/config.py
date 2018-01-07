@@ -54,8 +54,6 @@ def maybe_set(settings: typing.Dict[str, typing.Any],
         settings.setdefault(name, value)
     elif default is not None:
         settings.setdefault(name, default)
-    if name not in settings:
-        raise RuntimeError(f'Could not get a value for `{name}` setting.')
 
 
 def _tm_activate_hook(request) -> bool:
@@ -81,6 +79,12 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'database.url', 'DATABASE_URL')
     maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'ratelimit.url', 'REDIS_URL')
+
+    maybe_set(settings, 'mail.host', 'MAIL_HOST')
+    maybe_set(settings, 'mail.port', 'MAIL_PORT')
+    maybe_set(settings, 'mail.username', 'MAIL_USERNAME')
+    maybe_set(settings, 'mail.password', 'MAIL_PASSWORD')
+    maybe_set(settings, 'mail.ssl', 'MAIL_SSL', default=True)
 
     # Setup our development environment
     if settings['armonaut.env'] == Environment.DEVELOPMENT:
@@ -135,6 +139,9 @@ def configure(settings=None) -> Configurator:
 
     # Register support for services
     config.include('pyramid_services')
+
+    # Register emailing tasks
+    config.include('pyramid_mailer')
 
     # Register support for database connections
     config.include('.db')

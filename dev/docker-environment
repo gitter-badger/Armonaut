@@ -1,0 +1,11 @@
+ARMONAUT_ENV=development
+ARMONAUT_TOKEN=insecuretoken
+
+AMQP_URL=amqp://guest@rabbitmq:5672//
+DATABASE_URL=postgresql://postgres@database:5432/armonaut
+REDIS_URL=redis://redis:6379/0
+
+MAIL_HOST=smtp
+MAIL_PORT=2525
+MAIL_SENDER=armonaut@armonaut.io
+MAIL_SSL=false
