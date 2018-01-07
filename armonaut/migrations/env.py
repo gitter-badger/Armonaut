@@ -15,7 +15,7 @@ def run_migrations_offline():
     script output.
     """
     app_config = configure()
-    url = app_config.registry.settings['sqlalchemy.url']
+    url = app_config.registry.settings['database.url']
     context.configure(url=url)
 
     with context.begin_transaction():
@@ -29,7 +29,7 @@ def run_migrations_online():
     and associate a connection with the context.
     """
     app_config = configure()
-    url = app_config.registry.settings['sqlalchemy.url']
+    url = app_config.registry.settings['database.url']
     connectable = create_engine(url, poolclass=pool.NullPool)
 
     with connectable.connect() as connection:

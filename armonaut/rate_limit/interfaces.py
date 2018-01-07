@@ -12,16 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut.db import Model
-from sqlalchemy import Column, String, DateTime, Boolean
+from zope.interface import Interface
 
 
-class User(Model):
-    __tablename__ = 'users'
+class IRateLimiter(Interface):
+    def hit(self, *identifiers):
+        raise NotImplementedError()
 
-    email = Column(String(96), nullable=False, index=True, unique=True)
-    password = Column(String(60), nullable=False)
+    def test(self, *identifiers):
+        raise NotImplementedError()
 
-    email_verified = Column(Boolean, default=False, nullable=False)
-    email_verify_code = Column(String(32), default=None)
-    email_verify_expires = Column(DateTime, default=None)
+    def resets_in(self, *identifiers):
+        raise NotImplementedError()

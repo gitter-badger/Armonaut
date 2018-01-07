@@ -8,5 +8,5 @@
 - PostgreSQL
 - Redis
 - RabbitMQ
-- Fastly
 - RedBeat
+- Mailgun

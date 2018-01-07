@@ -11,17 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from armonaut.db import Model
-from sqlalchemy import Column, String, DateTime, Boolean
-
-
-class User(Model):
-    __tablename__ = 'users'
-
-    email = Column(String(96), nullable=False, index=True, unique=True)
-    password = Column(String(60), nullable=False)
-
-    email_verified = Column(Boolean, default=False, nullable=False)
-    email_verify_code = Column(String(32), default=None)
-    email_verify_expires = Column(DateTime, default=None)

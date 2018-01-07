@@ -35,7 +35,6 @@ def require_https_tween_factory(handler, registry):
                             status=403,
                             content_type='text/plain')
             resp.status = '403 SSL is required'
-            resp.headers['X-Fastly-Error'] = '803'
             return resp
 
         return handler(request)
@@ -133,6 +132,9 @@ def configure(settings=None) -> Configurator:
         'tm.annotate_user': False
     })
     config.include('pyramid_tm')
+
+    # Register support for services
+    config.include('pyramid_services')
 
     # Register support for database connections
     config.include('.db')

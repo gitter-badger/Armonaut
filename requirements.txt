@@ -1,5 +1,7 @@
 alembic
+argon2-cffi
 bcrypt
+click
 celery
 celery-redbeat
 redis
@@ -18,3 +20,4 @@ psycopg2
 zope.interface
 zope.sqlalchemy
 msgpack-python
+passlib

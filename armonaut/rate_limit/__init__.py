@@ -18,9 +18,12 @@ from datetime import datetime, timezone, timedelta
 from limits import parse_many
 from limits.strategies import MovingWindowRateLimiter
 from limits.storage import storage_from_string
+from zope.interface import implementer
+from armonaut.rate_limit.interfaces import IRateLimiter
 
 
-class RateLimiter(object):
+@implementer(IRateLimiter)
+class RateLimiter:
     def __init__(self, storage, limit, identifiers=None):
         if identifiers is None:
             identifiers = []
@@ -63,6 +66,18 @@ class RateLimiter(object):
             resets.append(reset - current)
 
         return first(sorted(resets))
+
+
+@implementer(IRateLimiter)
+class DummyRateLimiter:
+    def test(self, *identifiers):
+        return True
+
+    def hit(self, *identifiers):
+        return True
+
+    def resets_in(self, *identifiers):
+        return None
 
 
 class RateLimit(object):

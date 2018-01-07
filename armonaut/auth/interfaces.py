@@ -12,16 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut.db import Model
-from sqlalchemy import Column, String, DateTime, Boolean
+from zope.interface import Interface
 
 
-class User(Model):
-    __tablename__ = 'users'
+class IUserService(Interface):
+    def get_user(self, user_id):
+        raise NotImplementedError()
 
-    email = Column(String(96), nullable=False, index=True, unique=True)
-    password = Column(String(60), nullable=False)
+    def find_user(self, email):
+        raise NotImplementedError()
 
-    email_verified = Column(Boolean, default=False, nullable=False)
-    email_verify_code = Column(String(32), default=None)
-    email_verify_expires = Column(DateTime, default=None)
+    def check_password(self, user_id, password):
+        raise NotImplementedError()
+
+    def create_user(self, email, password):
+        raise NotImplementedError()
+
+    def update_user(self, **changes):
+        raise NotImplementedError()
+
+    def verify_user(self, user_id, email):
+        raise NotImplementedError()
