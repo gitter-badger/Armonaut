@@ -72,6 +72,22 @@ After installing this you should be able to run the following command:
 docker-compose --version
 ```
 
+### Installing Node, npm, and Gulp
+
+We use Node, npm, and Gulp to build our static JavaScript and SCSS
+files for Armonaut. If you're only modifying Python code you don't
+need to take these steps, they're taken care of within Dockerfiles.
+
+```bash
+# Installing Node 8.x
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install nodejs
+
+# Installing Gulp and dependencies
+npm install --global gulp-cli
+npm install
+```
+
 ### Creating a Fork of Armonaut
 
 Sign in with your GitHub account and click the [fork] button for Armonaut.
@@ -183,3 +199,6 @@ See additional [documentation about the toolbar](https://docs.pylonsproject.org/
 - [Bok-Choy](http://bok-choy.readthedocs.io/en/latest)
 - [Needle](https://needle.readthedocs.io/en/latest/)
 - [Docker](https://docs.docker.com/)
+- [npm](https://docs.npmjs.com/)
+- [Sass](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
+- [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/API.md)

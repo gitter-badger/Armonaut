@@ -58,8 +58,8 @@ class RateLimiter:
             current = datetime.now(tz=timezone.utc)
             reset = datetime.utcfromtimestamp(resets_at)
 
-            # If the current time is greater than the reset time we will skip for now
-            # because it's either already reset or resetting now.
+            # If the current time is greater than the resets time we will skip for now
+            # because it's either already resets or resetting now.
             if current > reset:
                 continue
 
