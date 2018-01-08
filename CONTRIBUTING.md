@@ -84,7 +84,7 @@ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt-get install nodejs
 
 # Installing Gulp and dependencies
-npm install --global gulp-cli
+sudo npm install --global gulp-cli
 npm install
 ```
 
@@ -134,6 +134,21 @@ Whenever you make modifications to the Armonaut codebase run the following comma
 docker-compose build
 docker-compose up
 ```
+
+### Building static resources with Gulp, Sass, and Uglify
+
+When you make modifications to static resources make sure to build them again with Gulp.
+
+```bash
+# Build all static resources
+gulp
+
+# Watch static resources and build automatically when changes are detected
+gulp watch
+```
+
+All stylesheets are found in `armonaut/static/scss/*` and all JavaScript is found
+in  `armonaut/static/js/*`.
 
 ### Syncing your Fork with the latest `master` branch
 
