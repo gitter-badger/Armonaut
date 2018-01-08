@@ -158,6 +158,23 @@ def configure(settings=None) -> Configurator:
     # Enable compression of our HTTP responses
     config.add_tween('armonaut.compression.compression_tween_factory')
 
+    # Setup static file serving
+    prevent_http_cache = \
+        config.get_settings().get("pyramid.prevent_http_cache", False)
+    max_age = 0 if prevent_http_cache else 10 * 365 * 24 * 60 * 60
+    config.include('.static')
+    config.add_static_view(
+        'static',
+        'armonaut:static/dist/',
+        cache_max_age=max_age
+    )
+    config.whitenoise_serve_static(
+        autorefresh=prevent_http_cache,
+        max_age=max_age,
+        manifest='armonaut:static/dist/manifest.json'
+    )
+    config.whitenoise_add_files('armonaut:static/dist/', prefix='/static/')
+
     # Scan everything for additional configuration
     config.scan(ignore=['armonaut.migrations.env',
                         'armonaut.celery',

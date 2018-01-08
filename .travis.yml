@@ -11,7 +11,7 @@ env:
   global:
     - ARMONAUT_ENV=development
     - SECRET_KEY=travisci
-    - DATABASE_URL=postgresql://postgres@database:5432/armonaut
+    - DATABASE_URL=postgresql://postgres@localhost:5432/armonaut
     - REDIS_URL=redis://localhost:6379/0
     - AMQP_URL=amqp://guest@localhost:5672//
   matrix:

@@ -21,3 +21,4 @@ zope.sqlalchemy
 msgpack-python
 passlib
 pyramid-mailer
+whitenoise

@@ -7,25 +7,25 @@ var rename = require('gulp-rename');
 
 gulp.task('sass', function () {
   return gulp.src('./armonaut/static/scss/**/*.scss')
-    .pipe(concat('armonaut.scss'))
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(concat('armonaut.css'))
     .pipe(gulp.dest('./armonaut/static/dist/css'));
 });
 
 gulp.task('uglify', function () {
-  return gulp.src('./armonaut/static/js/**/.js')
-    .pipe(contat('armonaut.js'))
+  return gulp.src('./armonaut/static/js/**/*.js')
+    .pipe(concat('armonaut.js'))
     .pipe(gulp.dest('./armonaut/static/dist/js'))
     .pipe(rename('armonaut.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./armonaut/static/dist/js'));
-})
+});
 
 gulp.task('watch', function () {
   gulp.watch('./armonaut/static/scss/**/*.scss', ['sass']);
   gulp.watch('./armonaut/static/js/**/.js', ['uglify']);
-})
+});
 
 gulp.task('default', function () {
-    gulp.start('sass');
+    gulp.start('sass', 'uglify');
 });
