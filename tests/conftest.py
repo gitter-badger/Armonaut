@@ -57,6 +57,7 @@ def app_config(database):
         'armonaut.env': Environment.DEVELOPMENT,
         'database.url': database
     })
+    config.registry.settings['armonaut.require_https'] = False
 
     # Make sure that our migrations have been run.
     command.upgrade(config.alembic_config(), 'head')

@@ -1,0 +1,19 @@
+#!/bin/bash
+# Script for installing Chrome and ChromeDriver for Selenium tests
+
+export CHROMEDRIVER_VERSION=2.26
+
+# Installing Chrome
+sudo apt-get install -y libxss1 libappindicator1 libindicator7 unzip
+curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
+
+sudo dpkg -i google-chrome*.deb
+sudo apt-get install -f
+rm google-chrome*.deb
+
+# Installing ChromeDriver
+curl http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip -o /tmp/chromedriver.zip
+unzip /tmp/chromedriver.zip
+chmod +x chromedriver
+sudo mv chromedriver /usr/local/bin
+rm /tmp/chronedriver.zip

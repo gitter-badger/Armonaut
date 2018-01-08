@@ -2,9 +2,6 @@
   "name": "armonaut",
   "version": "1.0.0",
   "description": "Flexible, Scalable, and Powerful Continuous Integration",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SethMichaelLarson/Armonaut.git"

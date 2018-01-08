@@ -11,9 +11,16 @@ This guide is written for Ubuntu 17.10 but the workflow will be similar compared
 Development is going to be tough on Windows systems because of Docker-Compose so I sadly can't recommend Windows
 for anything beyond small changes. Sorry! (I use VirtualBox to virtualize Ubuntu 17.10 on my desktop)
 
+Ensure that when you execute `python3 --version` the output is similar to the following:
+```bash
+$ python3 --version
+Python 3.6.4
+```
+
 **NOTE:** Ubuntu 17.10 packages Python 3.6 by default. Armonaut requires Python 3.6+.
 If you're using a different platform you must install Python 3.6 along with virtualenv
-and pip another way.  Google is your friend!
+and pip another way.  I suggest [`pyenv`](https://github.com/pyenv/pyenv) but there are
+other ways as well. Google is your friend!
 
 ### Installing Dependencies
 
@@ -114,12 +121,26 @@ python -m pip install -r requirements.txt -r dev-requirements.txt
 From here  you should have a functional fork for Armonaut. You can make sure you've
 got everything configured properly by running the unit tests and integration tests (see below) 
 
+To update all your dependencies use the following command:
+
+```bash
+python3 -m venv venv/
+source venv/bin/activate
+python -m pip install -U -r requirements.txt -r dev-requirements.txt
+```
+
+To deactivate that virtualenv use the following command:
+
+```bash
+deactivate
+```
+
 ### Building all Docker images with Docker-Compose
 
 Run the following command to pull all containers required for running
 Armonaut locally in development mode.
 
-**NOTE:** This command should take a *LONG* time to execute the first time.
+**NOTE:** This command will take a while to execute the first time.
 Any time your run this command after this will be much faster due to caching of containers and their layers.
 Every time you modify code should only take a few seconds to run the next time.
 
@@ -132,7 +153,6 @@ Whenever you make modifications to the Armonaut codebase run the following comma
 
 ```bash
 docker-compose build
-docker-compose up
 ```
 
 ### Building static resources with Gulp, Sass, and Uglify
@@ -191,19 +211,61 @@ This will allow you to use hinting and auto-complete for all your installed modu
 
 ## Making changes to Armonaut
 
-**TODO**
-
 ### Using the Pyramid Debugtoolbar
+
+The debug toolbar can be found by clicking the red box on the right side of
+any page rendered on the web application running in `DEVELOPMENT` mode.
+After clicking this button you will be brought to a menu with many options
+for debugging how the views and requests are processed by the web application.
+
+Use this for initial performance testing and debugging purposes.
 
 See additional [documentation about the toolbar](https://docs.pylonsproject.org/projects/pyramid_debugtoolbar/en/latest/#usage) for more information.
 
+### Linting your code with Flake8
+
+Armonaut uses [flake8](http://flake8.pycqa.org/en/latest/) as a code linting tool
+in order to catch defects and to keep code maintainabily high. Our only modification
+to flake8's default configuration is increasing maximum line length to 99 characters
+instead of 79 due to modern IDEs and screen sizes.
+
+```bash
+flake8  # You can run this command anytime with the virtualenv active
+```
+
 ### Running unit tests
 
-**TODO**
+Unit tests are smaller and faster running tests that only test specific sub-components
+of the system instead of the system as a whole.
+
+Unit tests are run and must pass for each commit that is submitted to GitHub.
+
+```bash
+docker-compose run web pytest tests/unit/
+```
 
 ### Running integration tests
 
-**TODO**
+Integration tests are longer tests that test the full functionality of the system
+and launch browsers to ensure that the web application renders correctly on
+all major browsers. Only run integration tests once all unit tests are passing.
+
+Integration tests are run and must pass for each commit that is submitted to GitHub.
+
+```bash
+docker-compose run web pytest tests/integration/
+```
+
+### Running render tests
+
+Render tests are tests that use Needle+Selenium in order to take pictures of the
+user interface in order to detect changes. When changing the user interface you
+will see these tests sometimes fail and that's okay! It just means the test
+detected a change that you made and a new baseline should be created.
+
+```bash
+docker-compose run web pytest tests/render/
+```
 
 ## Additional Reading
 
@@ -211,9 +273,11 @@ See additional [documentation about the toolbar](https://docs.pylonsproject.org/
 - [Pyramid Debugtoolbar](https://docs.pylonsproject.org/projects/pyramid_debugtoolbar/en/latest)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Selenium](http://www.seleniumhq.org/)
+- [PyCharm](https://www.jetbrains.com/pycharm/documentation/)
 - [Bok-Choy](http://bok-choy.readthedocs.io/en/latest)
 - [Needle](https://needle.readthedocs.io/en/latest/)
 - [Docker](https://docs.docker.com/)
 - [npm](https://docs.npmjs.com/)
 - [Sass](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)
 - [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/API.md)
+- [Flake8](http://flake8.pycqa.org/en/latest/)

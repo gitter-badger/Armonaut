@@ -7,3 +7,4 @@ flake8
 pyramid-debugtoolbar
 webtest
 pytest-cov
+pytest-needle

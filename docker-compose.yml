@@ -16,10 +16,6 @@ services:
     build:
       context: .
     command: gunicorn --bind 0.0.0.0:8080 armonaut.wsgi:app
-    volumes:
-      - ./dev:/opt/armonaut/dev:z
-      - ./armonaut:/opt/armonaut/armonaut:z
-      - ./tests:/opt/armonaut/tests:z
     env_file: dev/docker-environment
     ports:
       - '80:8080'
@@ -34,10 +30,6 @@ services:
     environment:
       C_FORCE_ROOT: '1'
     command: celery -A armonaut.celery.app worker -B -S redbeat.RedBeatScheduler -l info
-    volumes:
-      - ./dev:/opt/armonaut/dev:z
-      - ./armonaut:/opt/armonaut/armonaut:z
-      - ./tests:/opt/armonaut/tests:z
     env_file: dev/docker-environment
     links:
       - database
@@ -49,7 +41,5 @@ services:
     build:
       context: .
     command: python3 /opt/armonaut/dev/smtp.py 0.0.0.0:2525
-    volumes:
-      - ./dev/smtp.py:/opt/armonaut/dev/smtp.py:z
     ports:
       - '2525:2525'
