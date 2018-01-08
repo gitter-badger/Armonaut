@@ -110,6 +110,12 @@ git clone https://github.com/[YOUR ACCOUNT]/Armonaut
 After this completes there should be a directory in your current working directory
 named `Armonaut`. Use `cd` to go into this directory.
 
+Now we're going to set our upstream remote so that we can get upstream changes later.
+
+```bash
+git remote add upstream https://github.com/SethMichaelLarson/Armonaut
+```
+
 ### Setting up a Virtualenv
 
 ```bash
@@ -124,8 +130,6 @@ got everything configured properly by running the unit tests and integration tes
 To update all your dependencies use the following command:
 
 ```bash
-python3 -m venv venv/
-source venv/bin/activate
 python -m pip install -U -r requirements.txt -r dev-requirements.txt
 ```
 
@@ -134,6 +138,27 @@ To deactivate that virtualenv use the following command:
 ```bash
 deactivate
 ```
+
+### Building static resources with Gulp, Sass, and Uglify
+
+Install all dependencies to build static resources
+
+```bash
+npm install
+```
+
+When you make modifications to static resources make sure to build them again with Gulp.
+
+```bash
+# Build all static resources
+gulp
+
+# Watch static resources and build automatically when changes are detected
+gulp watch
+```
+
+All stylesheets are found in `armonaut/static/scss/*` and all JavaScript is found
+in  `armonaut/static/js/*`. All built resources are found in `armonaut/static/dist/*`.
 
 ### Building all Docker images with Docker-Compose
 
@@ -149,26 +174,14 @@ docker-compose up
 # To stop hosting locally use Ctrl+C
 ```
 
+With the containers running you should be able to open a browser and navigate to `http://localhost`
+and see the Armonaut home-page.
+
 Whenever you make modifications to the Armonaut codebase run the following commands to update the container:
 
 ```bash
 docker-compose build
 ```
-
-### Building static resources with Gulp, Sass, and Uglify
-
-When you make modifications to static resources make sure to build them again with Gulp.
-
-```bash
-# Build all static resources
-gulp
-
-# Watch static resources and build automatically when changes are detected
-gulp watch
-```
-
-All stylesheets are found in `armonaut/static/scss/*` and all JavaScript is found
-in  `armonaut/static/js/*`.
 
 ### Syncing your Fork with the latest `master` branch
 
@@ -211,7 +224,7 @@ This will allow you to use hinting and auto-complete for all your installed modu
 
 ## Making changes to Armonaut
 
-### Using the Pyramid Debugtoolbar
+### Using the Pyramid Debug Toolbar
 
 The debug toolbar can be found by clicking the red box on the right side of
 any page rendered on the web application running in `DEVELOPMENT` mode.
@@ -267,14 +280,13 @@ detected a change that you made and a new baseline should be created.
 docker-compose run web pytest tests/render/
 ```
 
-## Additional Reading
+## Additional Documentation
 
 - [Pyramid](https://trypyramid.com/)
 - [Pyramid Debugtoolbar](https://docs.pylonsproject.org/projects/pyramid_debugtoolbar/en/latest)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Selenium](http://www.seleniumhq.org/)
 - [PyCharm](https://www.jetbrains.com/pycharm/documentation/)
-- [Bok-Choy](http://bok-choy.readthedocs.io/en/latest)
 - [Needle](https://needle.readthedocs.io/en/latest/)
 - [Docker](https://docs.docker.com/)
 - [npm](https://docs.npmjs.com/)
