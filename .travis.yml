@@ -11,9 +11,9 @@ env:
   global:
     - ARMONAUT_ENV=development
     - SECRET_KEY=travisci
-    - DATABASE_URL=
-    - REDIS_URL=
-    - AMQP_URL=://
+    - DATABASE_URL=postgresql://postgres@database:5432/armonaut
+    - REDIS_URL=redis://localhost:6379/0
+    - AMQP_URL=amqp://guest@localhost:5672//
   matrix:
     - SCRIPT=lint
     - SCRIPT=unit
@@ -34,9 +34,16 @@ script:
     elif [ "$SCRIPT" == "lint" ]; then
       flake8 armonaut/ --max-line-length=99
     fi
+  - |
+    if [ "$SCRIPT" != "lint" ]; then
+      coverage report -m
+    fi
 
 after_success:
   - |
     if [ "$SCRIPT" != "lint" ]; then
       codecov
     fi
+
+notifications:
+  email: false
