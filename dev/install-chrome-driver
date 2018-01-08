@@ -16,4 +16,4 @@ curl http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriv
 unzip /tmp/chromedriver.zip
 chmod +x chromedriver
 sudo mv chromedriver /usr/local/bin
-rm /tmp/chronedriver.zip
+rm /tmp/chromedriver.zip
