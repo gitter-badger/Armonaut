@@ -124,7 +124,7 @@ source venv/bin/activate
 python -m pip install -r requirements.txt -r dev-requirements.txt
 ```
 
-From here  you should have a functional fork for Armonaut. You can make sure you've
+From here you should have a functional fork for Armonaut. You can make sure you've
 got everything configured properly by running the unit tests and integration tests (see below) 
 
 To update all your dependencies use the following command:

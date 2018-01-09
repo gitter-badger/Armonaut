@@ -115,6 +115,10 @@ def configure(settings=None) -> Configurator:
     # Create a configuration from the settings
     config = Configurator(settings=settings)
 
+    # Include SRF support immediate after the Configurator instance
+    # to ensure our defaults get set ASAP so no moficiatins before commit()
+    config.include('.csrf')
+
     # Add the Pyramid debugtoolbar for development debugging
     if config.registry.settings['armonaut.env'] == Environment.DEVELOPMENT:
         config.include('pyramid_debugtoolbar')
