@@ -22,3 +22,4 @@ msgpack-python
 passlib
 pyramid-mailer
 whitenoise
+itsdangerous

@@ -287,6 +287,7 @@ docker-compose run web pytest tests/render/
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Selenium](http://www.seleniumhq.org/)
 - [PyCharm](https://www.jetbrains.com/pycharm/documentation/)
+- [Pytest](https://docs.pytest.org/en/latest/contents.html)
 - [Needle](https://needle.readthedocs.io/en/latest/)
 - [Docker](https://docs.docker.com/)
 - [npm](https://docs.npmjs.com/)

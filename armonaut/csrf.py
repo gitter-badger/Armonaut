@@ -46,13 +46,13 @@ def includeme(config):
     # Make sure that the csrf_view comes over the
     # secure_view so that we can't access session cookie
     # without ensuring this isn't a cross-site request.
-    config.add_view_driver(csrf_view, under=INGRESS, over='secured_view')
+    config.add_view_deriver(csrf_view, under=INGRESS, over='secured_view')
 
     # Also add view deriver that will ensure that only allowed
     # methods get called on particular views. Needs to happen
     # prior to CSRF checks to prevent CSRF checks from firing
     # on views that we don't expect them to.
-    config.add_view_driver(
+    config.add_view_deriver(
         require_method_view,
         under=INGRESS,
         over='csrf_view'
