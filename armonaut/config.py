@@ -175,6 +175,9 @@ def configure(settings=None) -> Configurator:
     )
     config.whitenoise_add_files('armonaut:static/dist/', prefix='/static/')
 
+    # Register Content Security Policy service
+    config.include('.csp')
+
     # Scan everything for additional configuration
     config.scan(ignore=['armonaut.migrations.env',
                         'armonaut.celery',
