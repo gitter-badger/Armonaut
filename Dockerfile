@@ -15,13 +15,9 @@ RUN apt-get update && \
 
 WORKDIR /opt/armonaut
 
-# Installing various drivers for Selenium and Needle
-# COPY ./dev/install-firefox-driver /opt/armonaut/dev/
-# RUN ./dev/install-firefox-driver
-
-# Install pipenv and copy in our Pipfile which is less likely
-# to change compared to our code to try to skip reinstalling
-# requirements whenever we change our code.
+# Install requirements and dev-requirements before copying
+# our code over to try to skip installing them every
+# time code changes.
 COPY requirements.txt dev-requirements.txt /opt/armonaut/
 RUN python3 -m pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
 

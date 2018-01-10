@@ -17,8 +17,7 @@ env:
   matrix:
     - SCRIPT=lint
     - SCRIPT=unit
-    - SCRIPT=integration DRIVER=Firefox
-    - SCRIPT=integration DRIVER=Chrome
+    - SCRIPT=integration
 
 before_install:
   - psql -c 'create database armonaut;' -U postgres
@@ -26,23 +25,12 @@ before_install:
 install:
   - python -m pip install -r requirements.txt -r dev-requirements.txt
 
-  # Installing drivers for Selenium testing
-  - |
-    if [ "$SCRIPT" == "integration" ]; then
-      if [ "$DRIVER" == "Firefox" ]; then
-        sudo ./dev/install-firefox-driver
-      fi;
-      if [ "$DRIVER" == "Chrome" ]; then
-        sudo ./dev/install-chrome-driver
-      fi;
-    fi;
-
 script:
   - |
     if [ "$SCRIPT" == "unit" ]; then
       pytest tests/unit/
     elif [ "$SCRIPT" == "integration" ]; then
-      pytest tests/integration/ --driver $DRIVER
+      pytest tests/integration/
     elif [ "$SCRIPT" == "lint" ]; then
       flake8 armonaut/ --max-line-length=99
     fi
