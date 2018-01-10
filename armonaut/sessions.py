@@ -26,16 +26,16 @@ from pyramid.interfaces import ISession, ISessionFactory
 from armonaut.utils import crypto
 
 
+def _invalid_method(method):
+    @functools.wraps(method)
+    def wrapped(self, *args, **kwargs):
+        self._error_message()
+
+    return wrapped
+
+
 @implementer(ISession)
 class InvalidSession(dict):
-
-    @staticmethod
-    def _invalid_method(method):
-        @functools.wraps(method)
-        def wrapped(self, *args, **kwargs):
-            self._error_message()
-        return wrapped
-
     def _error_message(self):
         raise RuntimeError('Cannot use request.session in a '
                            'view without uses_session=True')
@@ -63,20 +63,20 @@ class InvalidSession(dict):
         self._error_message()
 
 
+def _changed_method(method):
+    @functools.wraps(method)
+    def wrapped(self, *args, **kwargs):
+        self.changed()
+        return method(self, *args, **kwargs)
+
+    return wrapped
+
+
 @implementer(ISession)
 class Session(dict):
 
     _csrf_token_key = '_csrf_token'
     _flash_key = '_flash_messages'
-
-    @staticmethod
-    def _changed_method(method):
-        @functools.wraps(method)
-        def wrapped(self, *args, **kwargs):
-            self.changed()
-            return method(self, *args, **kwargs)
-
-        return wrapped
 
     __setitem__ = _changed_method(dict.__setitem__)
     __delitem__ = _changed_method(dict.__delitem__)

@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import pytest
+import dsnparse
 from alembic import command
 from armonaut.config import configure, Environment
 from armonaut.db import Session as _Session
@@ -29,10 +31,15 @@ Session = scoped_session(_Session)
 
 @pytest.fixture(scope='session')
 def database(request):
-    host = 'database'
-    port = '5432'
-    user = 'postgres'
-    db = 'armonaut'
+    database_dsn = os.environ['DATABASE_URL']
+    dsn = dsnparse.parse(database_dsn)
+    if ':' in dsn.hostloc:
+        host, port = dsn.hostloc.split(':')
+    else:
+        host = dsn.host
+        port = '5432'
+    user = dsn.username
+    db = dsn.database
     version = '9.6'
 
     # If the database already exists we'll drop it here to make sure
@@ -48,7 +55,7 @@ def database(request):
     def drop_database():
         drop_postgresql_database(user, host, port, db, version)
 
-    return f'postgresql://{user}@{host}:{port}/{db}'
+    return database_dsn
 
 
 @pytest.fixture
