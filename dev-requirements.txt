@@ -9,3 +9,4 @@ webtest
 pytest-cov
 pytest-needle
 dsnparse
+pretend

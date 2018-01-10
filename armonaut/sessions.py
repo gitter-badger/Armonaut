@@ -20,9 +20,10 @@ import redis
 
 from zope.interface import implementer
 
-from pyramid import viewderivers
+from pyramid.viewderivers import INGRESS
 from pyramid.interfaces import ISession, ISessionFactory
 
+from armonaut.cache import add_vary
 from armonaut.utils import crypto
 
 
@@ -58,8 +59,40 @@ class InvalidSession(dict):
     update = _invalid_method(dict.update)
     values = _invalid_method(dict.values)
 
+    def invalidate(self):
+        self._error_message()
+
+    def flash(self, *args, **kwrgs):
+        self._error_message()
+
+    def peek_flash(self, queue=''):
+        self._error_message()
+
+    def pop_flash(self, queue=''):
+        self._error_message()
+
+    def changed(self):
+        self._error_message()
+
+    def get_csrf_token(self):
+        self._error_message()
+
+    def new_csrf_token(self):
+        self._error_message()
+
+    def should_save(self):
+        self._error_message()
+
+    @property
+    def sid(self):
+        self._error_message()
+
     @property
     def created(self):
+        self._error_message()
+
+    @property
+    def new(self):
         self._error_message()
 
 
@@ -78,18 +111,26 @@ class Session(dict):
     _csrf_token_key = '_csrf_token'
     _flash_key = '_flash_messages'
 
-    __setitem__ = _changed_method(dict.__setitem__)
     __delitem__ = _changed_method(dict.__delitem__)
     clear = _changed_method(dict.clear)
     pop = _changed_method(dict.pop)
     popitem = _changed_method(dict.popitem)
     update = _changed_method(dict.update)
 
-    def setdefault(self, k, default=None):
-        new_value = dict.setdefault(self, k, default)
-        if new_value is default:
-            self.changed()
-        return new_value
+    def __setitem__(self, key, value):
+        # Don't mark the session as modified if the value doesn't change.
+        if key in self and self[key] == value:
+            return
+        dict.__setitem__(self, key, value)
+        self.changed()
+
+    def setdefault(self, key, default=None):
+        # Don't mark the session as modified if the value doesn't change.
+        if key in self:
+            return
+        dict.__setitem__(self, key, default)
+        self.changed()
+        return self[key]
 
     def __init__(self, data=None, session_id=None, new=True):
         if data is None:
@@ -109,7 +150,7 @@ class Session(dict):
         return self._sid
 
     def changed(self):
-        return self._changed
+        self._changed = True
 
     def invalidate(self):
         self.clear()
@@ -248,3 +289,47 @@ class RedisSessionFactory:
                 httponly=True,
                 secure=request.scheme == 'https'
             )
+
+
+def session_view(view, info):
+    if info.options.get('uses_session'):
+        # If the view allows sessions we'll return the original view
+        # with a small wrapper that adds a `Vary: Cookie` header.
+        return add_vary('Cookie')(view)
+    elif info.exception_only:
+        return view
+    else:
+        # If sessions aren't allowed then we'll wrap the view
+        # that ensures that the session is an `InvalidSession`.
+        @functools.wraps(view)
+        def wrapped(context, request):
+            # Store the original session so it can be restored.
+            original_session = request.session
+            request.session = InvalidSession()
+
+            try:
+                return view(context, request)
+            finally:
+                # Restore the previous session so that
+                # the debug toolbar can use it.
+                request.session = original_session
+
+        return wrapped
+
+
+session_view.options = {'uses_session'}
+
+
+def includeme(config):
+    config.set_session_factory(
+        RedisSessionFactory(
+            config.registry.settings['sessions.secret'],
+            config.registry.settings['sessions.url']
+        )
+    )
+
+    config.add_view_deriver(
+        session_view,
+        over='csrf_view',
+        under=INGRESS
+    )
