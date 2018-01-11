@@ -17,12 +17,25 @@ import os
 import typing
 import transaction
 from pyramid.response import Response
-from pyramid.config import Configurator
+from pyramid.config import Configurator as _Configurator
+from pyramid.tweens import EXCVIEW
 
 
 class Environment(enum.Enum):
     PRODUCTION = 'production'
     DEVELOPMENT = 'development'
+
+
+class Configurator(_Configurator):
+    def add_wsgi_middleware(self, middleware, *args, **kwargs):
+        middlewares = self.get_settings().setdefault('wsgi.middlewares', [])
+        middlewares.append((middleware, args, kwargs))
+
+    def make_wsgi_app(self, *args, **kwargs):
+        app = super().make_wsgi_app(*args, **kwargs)
+        for middleware, args, kw in self.get_settings()['wsgi.middlewares']:
+            app = middleware(app, *args, **kw)
+        return app
 
 
 def require_https_tween_factory(handler, registry):
@@ -72,13 +85,18 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'armonaut.env', 'ARMONAUT_ENV',
               coercer=lambda x: Environment(x.lower()),
               default=Environment.PRODUCTION)
+    maybe_set(settings, 'armonaut.secret', 'ARMONAUT_SECRET')
 
     maybe_set(settings, 'celery.broker_url', 'AMQP_URL')
     maybe_set(settings, 'celery.result_url', 'REDIS_URL')
     maybe_set(settings, 'celery.scheduler_url', 'REDIS_URL')
     maybe_set(settings, 'database.url', 'DATABASE_URL')
-    maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'ratelimit.url', 'REDIS_URL')
+
+    maybe_set(settings, 'sessions.url', 'REDIS_URL')
+    maybe_set(settings, 'sessions.secret', 'ARMONAUT_SECRET')
+
+    maybe_set(settings, 'sentry.dsn', 'SENTRY_DSN')
 
     maybe_set(settings, 'mail.host', 'MAIL_HOST')
     maybe_set(settings, 'mail.port', 'MAIL_PORT')
@@ -163,7 +181,15 @@ def configure(settings=None) -> Configurator:
     config.add_tween('armonaut.config.require_https_tween_factory')
 
     # Enable compression of our HTTP responses
-    config.add_tween('armonaut.compression.compression_tween_factory')
+    config.add_tween(
+        'armonaut.compression.compression_tween_factory',
+        over=[
+            'armonaut.cache.http.conditional_http_tween_factory',
+            'pyramid.debugtoolbar.toolbar_tween_factory',
+            'armonaut.raven.raven_tween_factory',
+            EXCVIEW
+        ]
+    )
 
     # Setup static file serving
     prevent_http_cache = \
@@ -184,6 +210,9 @@ def configure(settings=None) -> Configurator:
 
     # Register Content Security Policy service
     config.include('.csp')
+
+    # Register Raven last so that it's our outermost WSGI middleware
+    config.include('.raven')
 
     # Scan everything for additional configuration
     config.scan(ignore=['armonaut.migrations.env',
