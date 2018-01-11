@@ -73,7 +73,7 @@ def whitenoise_tween_factory(handler, registry):
         if static_file is None:
             return handler(request)
 
-        if request.method != 'GET'  or request.method != 'HEAD':
+        if request.method != 'GET' or request.method != 'HEAD':
             return HTTPMethodNotAllowed()
 
         request_headers = dict(kv for kv in request.environ.items()

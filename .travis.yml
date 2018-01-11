@@ -32,7 +32,7 @@ script:
     elif [ "$SCRIPT" == "integration" ]; then
       pytest tests/integration/
     elif [ "$SCRIPT" == "lint" ]; then
-      flake8 armonaut/ --max-line-length=99
+      flake8
     fi
   - |
     if [ "$SCRIPT" != "lint" ]; then

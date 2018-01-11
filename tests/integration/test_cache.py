@@ -12,26 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import base64
-import hashlib
-from itsdangerous import (
-    BadSignature, Signer as _Signer, TimestampSigner as _TimestampSigner
-)
 
-__all__ = ['BadSignature', 'random_token', 'Signer', 'TimestampSigner']
+def test_simple_view_does_not_vary(webtest):
+    resp = webtest.get('/')
 
-
-def random_token():
-    token = base64.urlsafe_b64encode(os.urandom(32)).rstrip(b"=")
-    return token.decode("utf8")
-
-
-class Signer(_Signer):
-    default_digest_method = hashlib.sha512
-    default_key_derivation = 'hmac'
-
-
-class TimestampSigner(_TimestampSigner):
-    default_digest_method = hashlib.sha512
-    default_key_derivation = 'hmac'
+    assert resp.status_code == 200
+    assert resp.headers['Vary'] == 'Accept-Encoding'

@@ -16,6 +16,7 @@ import os
 import pytest
 import dsnparse
 from alembic import command
+import pyramid.testing
 from armonaut.config import configure, Environment
 from armonaut.db import Session as _Session
 from sqlalchemy import event
@@ -104,3 +105,14 @@ def webtest(app_config) -> _webtest.TestApp:
         yield _webtest.TestApp(app_config.make_wsgi_app())
     finally:
         app_config.registry['sqlalchemy.engine'].dispose()
+
+
+@pytest.fixture
+def pyramid_request():
+    return pyramid.testing.DummyRequest()
+
+
+@pytest.yield_fixture
+def pyramid_config(pyramid_request):
+    with pyramid.testing.testConfig(request=pyramid_request) as config:
+        yield config
