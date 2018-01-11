@@ -12,22 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import functools
+from zope.interface import Interface
 
 
-def add_vary_callback(*varies):
-    def wrapped(request, response):
-        vary = set(response.vary if response.vary is not None else [])
-        vary |= set(varies)
-        response.vary = vary
-    return wrapped
+class IOriginCache(Interface):
+    def create_service(context, request):
+        raise NotImplementedError()
 
+    def cache(keys, request, response, *, seconds=None,
+              stale_while_revalidate=None, stale_if_error=None):
+        raise NotImplementedError()
 
-def add_vary(*varies):
-    def wrapper(view):
-        @functools.wraps(view)
-        def wrapped(context, request):
-            request.add_response_callback(add_vary_callback(*varies))
-            return view(context, request)
-        return wrapped
-    return wrapper
+    def purge(keys):
+        raise NotImplementedError()

@@ -23,7 +23,7 @@ from zope.interface import implementer
 from pyramid.viewderivers import INGRESS
 from pyramid.interfaces import ISession, ISessionFactory
 
-from armonaut.cache import add_vary
+from armonaut.cache.http import add_vary
 from armonaut.utils import crypto
 
 

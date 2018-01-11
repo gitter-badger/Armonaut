@@ -156,6 +156,9 @@ def configure(settings=None) -> Configurator:
     # Register support for rate-limiting
     config.include('.rate_limit')
 
+    # Register HTTP caching
+    config.include('.cache.http')
+
     # Block non-HTTPS in production
     config.add_tween('armonaut.config.require_https_tween_factory')
 
