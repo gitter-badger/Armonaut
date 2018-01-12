@@ -25,3 +25,6 @@ whitenoise
 itsdangerous
 raven
 structlog
+misaka
+houdini.py
+pygments
