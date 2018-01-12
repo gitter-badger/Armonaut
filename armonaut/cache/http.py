@@ -66,7 +66,7 @@ def cache_control(seconds, public=True,
 
 
 def conditional_http_tween_factory(handler, registry):
-    def condition_http_tween(request):
+    def conditional_http_tween(request):
         response = handler(request)
 
         if response.last_modified is not None:
@@ -85,7 +85,7 @@ def conditional_http_tween_factory(handler, registry):
                 response.condional_response = True
                 response.md5_etag()
         return response
-    return condition_http_tween
+    return conditional_http_tween
 
 
 def includeme(config):

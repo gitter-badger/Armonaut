@@ -183,6 +183,9 @@ def configure(settings=None) -> Configurator:
     # Register HTTP caching
     config.include('.cache.http')
 
+    # Register XSS protections
+    config.include('.xss')
+
     # Block non-HTTPS in production
     config.add_tween('armonaut.config.require_https_tween_factory')
 
