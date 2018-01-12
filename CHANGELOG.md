@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 
+- Added logging framework
 - Added a Changelog.
 - Added Sentry integration support.
 - Added HTTP cache control and conditional responses.

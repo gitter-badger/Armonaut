@@ -96,6 +96,8 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'sessions.secret', 'ARMONAUT_SECRET')
 
+    maybe_set(settings, 'logging.level', 'LOGGING_LEVEL')
+
     maybe_set(settings, 'sentry.dsn', 'SENTRY_DSN')
 
     maybe_set(settings, 'mail.host', 'MAIL_HOST')
@@ -111,6 +113,7 @@ def configure(settings=None) -> Configurator:
         settings.setdefault('pyramid.reload_templates', True)
         settings.setdefault('pyramid.prevent_http_cache', True)
         settings.setdefault('debugtoolbar.hosts', ['0.0.0.0/0'])
+        settings.setdefault('logging.level', 'DEBUG')
         settings.setdefault(
             'debugtoolbar.panels',
             [f'pyramid_debugtoolbar.panels.{panel}'
@@ -136,6 +139,9 @@ def configure(settings=None) -> Configurator:
     # Include SRF support immediate after the Configurator instance
     # to ensure our defaults get set ASAP so no moficiatins before commit()
     config.include('.csrf')
+
+    # Add configuration for logging
+    config.include('.logging')
 
     # Add the Pyramid debugtoolbar for development debugging
     if config.registry.settings['armonaut.env'] == Environment.DEVELOPMENT:
@@ -208,7 +214,7 @@ def configure(settings=None) -> Configurator:
     )
     config.whitenoise_add_files('armonaut:static/dist/', prefix='/static/')
 
-    # Register Content Security Policy service
+    # Register Content-Security-Policy service
     config.include('.csp')
 
     # Register Raven last so that it's our outermost WSGI middleware
