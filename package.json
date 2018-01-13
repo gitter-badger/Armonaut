@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "homepage": "https://armonaut.io",
   "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-gzip": "^1.4.1",

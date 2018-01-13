@@ -215,8 +215,7 @@ def configure(settings=None) -> Configurator:
     )
     config.whitenoise_serve_static(
         autorefresh=prevent_http_cache,
-        max_age=max_age,
-        manifest='armonaut:static/dist/manifest.json'
+        max_age=max_age
     )
     config.whitenoise_add_files('armonaut:static/dist/', prefix='/static/')
 
