@@ -46,6 +46,9 @@ from armonaut.sessions import InvalidSession, Session
      'should_save']
 )
 def test_invalid_session_methods(method):
+    """Assert that InvalidSession can't have any methods
+    called without an exception being raised.
+    """
     session = InvalidSession()
     with pytest.raises(RuntimeError):
         getattr(session, method)()
@@ -56,12 +59,17 @@ def test_invalid_session_methods(method):
     ['sid', 'created', 'new']
 )
 def test_invalid_session_properties(prop):
+    """Assert that InvalidSession can't have any properties
+    read without an exception being raised."""
     session = InvalidSession()
     with pytest.raises(RuntimeError):
         getattr(session, prop)
 
 
 def test_create_new_timestamp(monkeypatch):
+    """Assert that session.created is the UTC timestamp
+    that it was created on.
+    """
     monkeypatch.setattr(time, 'time', lambda: 100)
 
     session = Session({})
@@ -76,6 +84,9 @@ def test_create_new_timestamp(monkeypatch):
      ({'foo': 'bar'}, {'foo': 'bar'})]
 )
 def test_create_new_session_id(monkeypatch, data, expected):
+    """Assert that when a new session is created that
+    it's properties are correctly set.
+    """
     monkeypatch.setattr(crypto, 'random_token', lambda: '12345678')
 
     session = Session(data)
@@ -86,6 +97,9 @@ def test_create_new_session_id(monkeypatch, data, expected):
 
 
 def test_new_session_not_changed():
+    """Assert that a session should not be saved on
+    creation without modifications.
+    """
     session = Session({'foo': 'bar'})
 
     assert not session.should_save()
@@ -103,6 +117,9 @@ def test_new_session_not_changed():
      ('setdefault', ('bar', 'foo'), True, {'foo': 'bar', 'bar': 'foo'})]
 )
 def test_session_changed(func, args, changed, expected):
+    """Assert that if a session is changed that it should be saved and
+    that the modifications occur correctly.
+    """
     session = Session({'foo': 'bar'})
     getattr(session, func)(*args)
 

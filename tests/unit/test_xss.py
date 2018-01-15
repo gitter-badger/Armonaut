@@ -17,6 +17,8 @@ from armonaut.xss import xss_tween_factory
 
 
 def test_xss_tween():
+    """Assert that all responses receive all XSS protection headers.
+    """
     response = pretend.stub(headers={})
     handler = pretend.call_recorder(lambda request: response)
     registry = pretend.stub(settings={})

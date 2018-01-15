@@ -70,19 +70,20 @@ def conditional_http_tween_factory(handler, registry):
         response = handler(request)
 
         if response.last_modified is not None:
-            response.condional_response = True
+            response.conditional_response = True
 
         streaming = not isinstance(response.app_iter, collections.Sequence)
 
         if response.etag is not None:
-            response.condional_response = True
+            response.conditional_response = True
         elif (request.method in {'GET', 'HEAD'} and
                 response.status_code == 200):
-            if streaming and response.content_length <= BUFFER_MAX:
+            if (streaming and response.content_length is not None and
+                    response.content_length <= BUFFER_MAX):
                 response.body  # noqa: Load the response body into memory
                 streaming = False
             if not streaming:
-                response.condional_response = True
+                response.conditional_response = True
                 response.md5_etag()
         return response
     return conditional_http_tween

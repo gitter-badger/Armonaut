@@ -18,6 +18,9 @@ from armonaut.docs.services import MisakaMarkdownRenderer
 
 @pytest.mark.parametrize('lexer', ['', 'zzz'])
 def test_render_code_block_no_lexer(lexer):
+    """Assert that code-blocks are rendered with <pre><code>
+    when there is no Pygments lexer for that language.
+    """
     renderer = MisakaMarkdownRenderer()
 
     rendered = renderer.render_markdown(f"""```{lexer}
