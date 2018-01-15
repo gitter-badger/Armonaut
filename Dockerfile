@@ -11,7 +11,8 @@ RUN apt-get update && \
                        libffi-dev \
                        python3-dev \
                        python3-pip \
-                       python3-venv
+                       python3-venv \
+                       libpq-dev
 
 WORKDIR /opt/armonaut
 
