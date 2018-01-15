@@ -106,6 +106,9 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'mail.password', 'MAIL_PASSWORD')
     maybe_set(settings, 'mail.ssl', 'MAIL_SSL', default=True)
 
+    # TODO: Remove this after setting up Heroku TLS
+    settings['armonaut.require_https'] = False
+
     # Setup our development environment
     if settings['armonaut.env'] == Environment.DEVELOPMENT:
         settings.setdefault('armonaut.require_https', False)
@@ -212,8 +215,7 @@ def configure(settings=None) -> Configurator:
     )
     config.whitenoise_serve_static(
         autorefresh=prevent_http_cache,
-        max_age=max_age,
-        manifest='armonaut:static/dist/manifest.json'
+        max_age=max_age
     )
     config.whitenoise_add_files('armonaut:static/dist/', prefix='/static/')
 

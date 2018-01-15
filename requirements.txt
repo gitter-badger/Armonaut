@@ -28,3 +28,4 @@ structlog
 misaka
 houdini.py
 pygments
+brotlipy

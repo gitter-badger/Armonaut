@@ -13,6 +13,7 @@ build/
 !armonaut/build/
 develop-eggs/
 dist/
+!armonaut/static/dist
 downloads/
 eggs/
 .eggs/

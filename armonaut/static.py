@@ -73,7 +73,7 @@ def whitenoise_tween_factory(handler, registry):
         if static_file is None:
             return handler(request)
 
-        if request.method != 'GET' or request.method != 'HEAD':
+        if request.method not in {'GET', 'HEAD'}:
             return HTTPMethodNotAllowed()
 
         request_headers = dict(kv for kv in request.environ.items()
@@ -85,7 +85,7 @@ def whitenoise_tween_factory(handler, registry):
             path,
             request=request,
             content_type=headers.pop('Content-Type', None),
-            content_encoding=headers.pop('Content-Encoding')
+            content_encoding=headers.pop('Content-Encoding', None)
         )
         resp.md5_etag()
         resp.headers.update(headers)
