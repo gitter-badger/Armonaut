@@ -6,6 +6,15 @@
 
 Flexible, Scalable and Powerful Continuous Integration
 
+## Features
+
+- 20+ Popular Languages
+- 100s of Services and Tools
+- Limitless Parallelization and Scalability
+- Variable Executor resources
+- Integrates with GitHub, BitBucket, and GitLab projects
+- Tools for running and debugging builds locally with Virtualbox
+
 ## Contributing
 
 Armonaut has a guide to start contributing found in [`CONTRIBUTING.md`](https://github.com/SethMichaelLarson/Armonaut/blob/master/CONTRIBUTING.md)
@@ -31,7 +40,6 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 Armonaut would not be possible without the following Open Source libraries:
 
 [alembic](https://bitbucket.org/zzzeek/alembic) (MIT),
-[amqp](http://github.com/celery/py-amqp) (BSD),
 [argon2-cffi](https://github.com/hynek/argon2_cffi) (MIT),
 [celery](http://celeryproject.org/) (BSD),
 [celery-redbeat](https://github.com/sibson/redbeat) (Apache-2.0),
