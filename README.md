@@ -2,6 +2,7 @@
 
 [![Travis](https://img.shields.io/travis/SethMichaelLarson/Armonaut/master.svg)](https://travis-ci.org/SethMichaelLarson/Armonaut)
 [![Codecov](https://img.shields.io/codecov/c/github/SethMichaelLarson/Armonaut/master.svg)](https://codecov.io/gh/SethMichaelLarson/Armonaut)
+[![Slack](https://img.shields.io/badge/slack-%23dev-brightgreen.svg)](https://armonaut.slack.com)
 
 Flexible, Scalable and Powerful Continuous Integration
 
@@ -24,10 +25,10 @@ View the latest releases and changes within the same file.
 
 ## Open Source
 
-The template for Armonaut is based heavily on [Warehouse](https://github.com/pypa/warehouse) which is
-[licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/master/LICENSE).
+The template for the Armonaut web application is based heavily on [Warehouse](https://github.com/pypa/warehouse)
+which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/master/LICENSE).
 
-Armonaut would not be possible without the following Open Source Python libraries:
+Armonaut would not be possible without the following Open Source libraries:
 
 [alembic](https://bitbucket.org/zzzeek/alembic) (MIT),
 [amqp](http://github.com/celery/py-amqp) (BSD),
@@ -48,6 +49,7 @@ Armonaut would not be possible without the following Open Source Python librarie
 [pyramid](https://trypyramid.com/) (ZPL),
 [pyramid-jinja2](https://github.com/Pylons/pyramid_jinja2) (BSD-like),
 [pyramid-mailer](http://docs.pylonsproject.org/projects/pyramid-mailer/en/latest/) (BSD),
+[pyramid-multiauth](https://github.com/mozilla-services/pyramid_multiauth) (MPL-2.0),
 [pyramid-retry](https://github.com/Pylons/pyramid_retry) (MIT),
 [pyramid-services](https://github.com/mmerickel/pyramid_services) (MIT),
 [pyramid-tm](http://docs.pylonsproject.org/projects/pyramid-tm/en/latest/) (BSD-like),
@@ -62,6 +64,11 @@ Armonaut would not be possible without the following Open Source Python librarie
 
 ## License
 
+Armonaut is licensed under the Apache-2.0 license. See
+[`LICENSE`](https://github.com/SethMichaelLarson/Armonaut/blob/master/LICENSE)
+for more information.
+
+```
 Copyright 2018 Seth Michael Larson
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,3 +82,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```

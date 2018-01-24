@@ -15,21 +15,59 @@
 from zope.interface import Interface
 
 
+class TooManyFailedLogins(Exception):
+    def __init__(self, *args, resets_in, **kwargs):
+        self.resets_in = resets_in
+        super(TooManyFailedLogins, self).__init__(*args, **kwargs)
+
+
+class InvalidPasswordResetToken(Exception):
+    def __init__(self, message, *args, **kwargs):
+        self.message = message
+        super(InvalidPasswordResetToken, self).__init__(*args, **kwargs)
+
+
 class IUserService(Interface):
-    def get_user(self, user_id):
-        raise NotImplementedError()
+    def get_user(user_id):
+        """
+        Return the user object that represented the given userid
+        or None if there is no user for that ID.
+        """
 
-    def find_user(self, email):
-        raise NotImplementedError()
+    def find_userid(email):
+        """
+        Returns the user ID of a user for the given username.
+        """
 
-    def check_password(self, user_id, password):
-        raise NotImplementedError()
+    def check_password(user_id, password):
+        """
+        Returns a boolean representing whether the given password
+        is valid for the given userid
+        """
 
-    def create_user(self, email, password):
-        raise NotImplementedError()
+    def create_user(email, password):
+        """
+        Attempts to create a new user with the given attributes.
+        """
 
-    def update_user(self, **changes):
-        raise NotImplementedError()
+    def update_user(user_id, **changes):
+        """
+        Updates the user object
+        """
 
-    def verify_user(self, user_id, email):
-        raise NotImplementedError()
+    def verify_user(user_id, email):
+        """
+        Verifies the user
+        """
+
+
+class IUserTokenService(Interface):
+    def generate_token(user):
+        """
+        Generates a unique token based on user attributes
+        """
+
+    def get_user_by_token(token):
+        """
+        Gets the user corresponding to the token provided
+        """

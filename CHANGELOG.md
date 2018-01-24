@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 
+- Added password reset token service.
 - Added default XSS protection via headers.
 - Added logging framework.
 - Added a Changelog.

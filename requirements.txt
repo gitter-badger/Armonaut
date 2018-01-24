@@ -8,6 +8,7 @@ amqp
 limits
 first
 pyramid
+pyramid-multiauth
 pyramid-services
 pyramid-retry
 pyramid-tm>=1.1.1,<2.0.0
