@@ -87,7 +87,7 @@ def configure(settings=None) -> Configurator:
               default=Environment.PRODUCTION)
     maybe_set(settings, 'armonaut.secret', 'ARMONAUT_SECRET')
 
-    maybe_set(settings, 'celery.broker_url', 'AMQP_URL')
+    maybe_set(settings, 'celery.broker_url', 'REDIS_URL')
     maybe_set(settings, 'celery.result_url', 'REDIS_URL')
     maybe_set(settings, 'celery.scheduler_url', 'REDIS_URL')
     maybe_set(settings, 'database.url', 'DATABASE_URL')

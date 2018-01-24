@@ -9,9 +9,6 @@ services:
   redis:
     image: redis:latest
 
-  rabbitmq:
-    image: rabbitmq:latest
-
   web:
     build:
       context: .
@@ -22,7 +19,6 @@ services:
     links:
       - database
       - redis
-      - rabbitmq
 
   worker:
     build:
@@ -34,7 +30,6 @@ services:
     links:
       - database
       - redis
-      - rabbitmq
       - smtp
 
   smtp:
