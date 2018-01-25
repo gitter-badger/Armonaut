@@ -44,6 +44,7 @@ Armonaut would not be possible without the following Open Source libraries:
 [celery](http://celeryproject.org/) (BSD),
 [celery-redbeat](https://github.com/sibson/redbeat) (Apache-2.0),
 [click](http://github.com/mitsuhiko/click) (BSD),
+[disposable-email-domains](https://github.com/di/disposable-email-domains) (MIT),
 [first](https://github.com/hynek/first/) (MIT),
 [gunicorn](http://gunicorn.org/) (MIT),
 [houdini.py](http://python-houdini.61924.nl/) (MIT),
@@ -68,7 +69,8 @@ Armonaut would not be possible without the following Open Source libraries:
 [whitenoise](http://whitenoise.evans.io/) (MIT),
 [wtforms](http://wtforms.simplecodes.com/) (BSD),
 [zope.interface](https://github.com/zopefoundation/zope.interface) (ZPL),
-[zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL)
+[zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL),
+[zxcvbn-python](https://github.com/dwolfhub/zxcvbn-python) (MIT)
 
 ## License
 

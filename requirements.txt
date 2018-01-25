@@ -30,3 +30,5 @@ misaka
 houdini.py
 pygments
 brotlipy
+zxcvbn-python
+disposable-email-domains

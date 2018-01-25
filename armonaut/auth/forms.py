@@ -12,41 +12,98 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from wtforms import Form, BooleanField, PasswordField, validators
-from wtforms.fields.html5 import EmailField
+import disposable_email_domains
+import wtforms
+import wtforms.fields.html5
+
+from armonaut import forms
+from armonaut.auth.interfaces import TooManyFailedLogins
 
 
-class RegisterForm(Form):
-    email = EmailField(
-        'Email Address',
-        [validators.DataRequired(),
-         validators.Email(),
-         validators.Length(min=4, max=96)]
-    )
-    password = PasswordField(
-        'Password',
-        [validators.DataRequired()]
-    )
-    confirm_password = PasswordField(
-        'Confirm Password',
-        [validators.DataRequired(),
-         validators.EqualTo('password', message='Passwords do not match.')]
-    )
-    accept_tos = BooleanField(
-        'I accept the Terms and Services',
-        [validators.DataRequired()]
+class RegistrationForm(forms.Form):
+    email = wtforms.fields.html5.EmailField(
+        validators=[
+            wtforms.validators.DataRequired(),
+            wtforms.validators.Email(
+                message=('The email address you have chosen is not a '
+                         'valid format. Please try again.')
+            )
+        ]
     )
 
+    password = wtforms.PasswordField(
+        validators=[
+            wtforms.validators.DataRequired(),
+            forms.PasswordStrengthValidator(
+                user_input_fields=['email']
+            )
+        ]
+    )
 
-class LoginForm(Form):
-    email = EmailField(
-        'Email Address',
-        [validators.DataRequired(),
-         validators.Email(),
-         validators.Length(min=4, max=96)]
+    password_confirm = wtforms.PasswordField(
+        validators=[
+            wtforms.validators.DataRequired(),
+            wtforms.validators.EqualTo(
+                'password', 'The two password fields do not match.'
+            )
+        ]
     )
-    password = PasswordField(
-        'Password',
-        [validators.DataRequired()]
+
+    def __init__(self, *args, user_service, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user_service = user_service
+
+    def validate_email(self, field):
+        if self.user_service.find_userid(field.data) is not None:
+            raise wtforms.validators.ValidationError(
+                'This email address is already being used by another account. '
+                'Please use a different email address.'
+            )
+
+        domain = field.data.split('@')[-1]
+        if domain in disposable_email_domains.blacklist:
+            raise wtforms.validators.ValidationError(
+                'This email address domain is not allowed. Please use a '
+                'different email address.'
+            )
+
+
+class LoginForm(forms.Form):
+    email = wtforms.fields.html5.EmailField(
+        validators=[
+            wtforms.validators.DataRequired()
+        ]
     )
-    remember_me = BooleanField('Remember Me')
+
+    password = wtforms.fields.PasswordField(
+        validators=[
+            wtforms.validators.DataRequired()
+        ]
+    )
+
+    def __init__(self, *args, user_service, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user_service = user_service
+
+    def validate_password(self, field):
+        userid = self.user_service.find_userid(self.username.data)
+        if userid is not None:
+            try:
+                if not self.user_service.check_password(userid, field.data):
+                    raise wtforms.validators.ValidationError(
+                        'The email address and password combination you have '
+                        'provided is invalid. Please try again or request a '
+                        'password reset.'
+                    )
+            except TooManyFailedLogins:
+                raise wtforms.validators.ValidationError(
+                    'There have been too many unsuccessful login attempts. '
+                    'Try again later or contact support.'
+                )
+        else:
+
+            # This isn't a security flaw as email-enumeration
+            # can occur already via registration screen.
+            raise wtforms.validators.ValidationError(
+                'There is no account registered for this email address.'
+            )

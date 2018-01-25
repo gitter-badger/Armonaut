@@ -86,6 +86,7 @@ def configure(settings=None) -> Configurator:
               coercer=lambda x: Environment(x.lower()),
               default=Environment.PRODUCTION)
     maybe_set(settings, 'armonaut.secret', 'ARMONAUT_SECRET')
+    maybe_set(settings, 'armonaut.domain', 'ARMONAUT_DOMAIN')
 
     maybe_set(settings, 'celery.broker_url', 'REDIS_URL')
     maybe_set(settings, 'celery.result_url', 'REDIS_URL')
@@ -107,7 +108,7 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'mail.ssl', 'MAIL_SSL', default=True)
 
     # TODO: Remove this after setting up Heroku TLS
-    settings['armonaut.require_https'] = False
+    settings['armonaut.require_https'] = True
 
     # Setup our development environment
     if settings['armonaut.env'] == Environment.DEVELOPMENT:
@@ -185,6 +186,9 @@ def configure(settings=None) -> Configurator:
 
     # Register HTTP caching
     config.include('.cache.http')
+
+    # Register authentication
+    config.include('.auth')
 
     # Register XSS protections
     config.include('.xss')

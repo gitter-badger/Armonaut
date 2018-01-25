@@ -14,4 +14,8 @@
 
 
 def includeme(config):
+    armonaut = config.get_settings().get('armonaut.domain')
+
     config.add_route('index', '/')
+
+    config.add_route('auth.login', '/auth/login', domain=armonaut)
