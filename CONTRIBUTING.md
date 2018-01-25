@@ -119,7 +119,7 @@ git remote add upstream https://github.com/SethMichaelLarson/Armonaut
 ### Setting up a Virtualenv
 
 ```bash
-python3 -m venv venv/
+python -m venv venv/
 source venv/bin/activate
 python -m pip install -r requirements.txt -r dev-requirements.txt
 ```
@@ -170,17 +170,17 @@ Any time your run this command after this will be much faster due to caching of 
 Every time you modify code should only take a few seconds to run the next time.
 
 ```bash
-docker-compose up
+python -m armonaut ctrl up
 # To stop hosting locally use Ctrl+C
 ```
 
 With the containers running you should be able to open a browser and navigate to `http://localhost`
 and see the Armonaut home-page.
 
-Whenever you make modifications to the Armonaut codebase run the following commands to update the container:
+Whenever you make modifications to the Armonaut codebase run the following commands to update the containers:
 
 ```bash
-docker-compose build
+python -m armonaut ctrl build
 ```
 
 ### Syncing your Fork with the latest `master` branch
@@ -222,7 +222,60 @@ Once you launch and open Armonaut in your PyCharm IDE go into `File -> Settings 
 select the gear/cog to add a local virtual environment. Select `Existing Environment` and choose your `.../Armonaut/venv/bin/python`.
 This will allow you to use hinting and auto-complete for all your installed modules.
 
-## Making changes to Armonaut
+## Making Changes to Armonaut
+
+### Running Tests
+
+Before submitting and throughout development of your change you should run the test suite.
+To run the entire test suite (which should be done before committing!) run the following
+command:
+
+```bash
+python -m armonaut ctrl test
+```
+
+See below on how to run subsets of the test suite.
+
+#### Running Unit Tests
+
+Unit tests are smaller and faster running tests that only test specific sub-components
+of the system instead of the system as a whole.
+
+Unit tests are run and must pass for each commit that is submitted to GitHub.
+
+```bash
+python -m armonaut ctrl test tests/unit
+```
+
+#### Running Integration Tests
+
+Integration tests are longer tests that test the full functionality of the system
+and launch browsers to ensure that the web application renders correctly on
+all major browsers. Only run integration tests once all unit tests are passing.
+
+Integration tests are run and must pass for each commit that is submitted to GitHub.
+
+```bash
+python -m armonaut ctrl test tests/integration/
+```
+
+#### Running A Specific Test
+
+If you want to just run one set of tests within a file you can pass just the file
+path and only those tests will be executed.
+
+```bash
+python -m armonaut ctrl test tests/unit/test_sessions.py
+```
+
+### Debugging with a Shell
+
+This will start all containers except the web container and allow you to debug
+the container itself if needed. Press Ctrl+D to exit the shell session.
+
+```bash
+python -m armonaut ctrl shell
+```
 
 ### Using the Pyramid Debug Toolbar
 
@@ -235,49 +288,17 @@ Use this for initial performance testing and debugging purposes.
 
 See additional [documentation about the toolbar](https://docs.pylonsproject.org/projects/pyramid_debugtoolbar/en/latest/#usage) for more information.
 
-### Linting your code with Flake8
+### Linting your Code with Flake8
 
 Armonaut uses [flake8](http://flake8.pycqa.org/en/latest/) as a code linting tool
 in order to catch defects and to keep code maintainabily high. Our only modification
 to flake8's default configuration is increasing maximum line length to 99 characters
 instead of 79 due to modern IDEs and screen sizes.
 
-```bash
-flake8  # You can run this command anytime with the virtualenv active
-```
-
-### Running unit tests
-
-Unit tests are smaller and faster running tests that only test specific sub-components
-of the system instead of the system as a whole.
-
-Unit tests are run and must pass for each commit that is submitted to GitHub.
+You can run this command whenever the virtualenv is active:
 
 ```bash
-docker-compose run web pytest tests/unit/
-```
-
-### Running integration tests
-
-Integration tests are longer tests that test the full functionality of the system
-and launch browsers to ensure that the web application renders correctly on
-all major browsers. Only run integration tests once all unit tests are passing.
-
-Integration tests are run and must pass for each commit that is submitted to GitHub.
-
-```bash
-docker-compose run web pytest tests/integration/
-```
-
-### Running render tests
-
-Render tests are tests that use Needle+Selenium in order to take pictures of the
-user interface in order to detect changes. When changing the user interface you
-will see these tests sometimes fail and that's okay! It just means the test
-detected a change that you made and a new baseline should be created.
-
-```bash
-docker-compose run web pytest tests/render/
+flake8
 ```
 
 ## Additional Documentation

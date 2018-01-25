@@ -28,4 +28,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added Gulp configuration for compiling static resources.
 - Added Dockerfile and Docker-Compose setup for testing and development.
 
+### Tools
+
+- Added `armonaut db ...` tools for managing migrations via Alembic.
+- Added `armonaut ctrl ...` tool for controlling `docker-compose` commands and
+  running all tests against the local build.
+- Added symlinks within the `Dockerfile` for mapping `python3` -> `python` along
+  with all other tools suffixed with 3 for ease-of-use.
+
 [Unreleased]: https://github.com/SethMichaelLarson/Armonaut/compare/0d5db69a6fe58fcf21caef3b3ee89777796aaa6d...HEAD

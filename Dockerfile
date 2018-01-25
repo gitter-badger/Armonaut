@@ -12,7 +12,15 @@ RUN apt-get update && \
                        python3-dev \
                        python3-pip \
                        python3-venv \
-                       libpq-dev
+                       libpq-dev && \
+
+    # Create symlinks that make it so you don't have to type python3 every time.
+    cd /usr/bin && \
+	ln -s idle3 idle && \
+	ln -s pydoc3 pydoc && \
+	ln -s python3 python && \
+	ln -s pip3 pip && \
+    ln -s python3-config python-config
 
 WORKDIR /opt/armonaut
 
@@ -20,7 +28,7 @@ WORKDIR /opt/armonaut
 # our code over to try to skip installing them every
 # time code changes.
 COPY requirements.txt dev-requirements.txt /opt/armonaut/
-RUN python3 -m pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
 
 # Finally add all our code to the image which will change often.
 ADD . /opt/armonaut

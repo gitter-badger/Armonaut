@@ -32,7 +32,7 @@ def alembic_lock(engine, alembic_config):
                 "SELECT pg_advisory_unlock(hashtext('alembic'))")
 
 
-@armonaut.group()  # pragma: no branch
+@armonaut.group()  # pragma: no cover
 def db():
     pass
 
