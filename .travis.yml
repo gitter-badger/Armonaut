@@ -9,7 +9,7 @@ services:
 env:
   global:
     - ARMONAUT_ENV=development
-    - SECRET_KEY=travisci
+    - ARMONAUT_SECRET=notasecret
     - DATABASE_URL=postgresql://postgres@localhost:5432/armonaut
     - REDIS_URL=redis://localhost:6379/0
   matrix:

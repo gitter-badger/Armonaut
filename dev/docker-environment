@@ -1,5 +1,5 @@
 ARMONAUT_ENV=development
-ARMONAUT_TOKEN=insecuretoken
+ARMONAUT_SECRET=notasecret
 
 DATABASE_URL=postgresql://postgres@database:5432/armonaut
 REDIS_URL=redis://redis:6379/0
