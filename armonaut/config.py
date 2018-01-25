@@ -16,7 +16,6 @@ import enum
 import os
 import typing
 import transaction
-from pyramid.response import Response
 from pyramid.config import Configurator as _Configurator
 from pyramid.tweens import EXCVIEW
 
@@ -91,11 +90,8 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'mail.password', 'MAIL_PASSWORD')
     maybe_set(settings, 'mail.ssl', 'MAIL_SSL', default=True)
 
-    settings['armonaut.require_https'] = True
-
     # Setup our development environment
     if settings['armonaut.env'] == Environment.DEVELOPMENT:
-        settings.setdefault('armonaut.require_https', False)
         settings.setdefault('pyramid.reload_assets', True)
         settings.setdefault('pyramid.reload_templates', True)
         settings.setdefault('pyramid.prevent_http_cache', True)
