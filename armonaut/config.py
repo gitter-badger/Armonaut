@@ -38,22 +38,6 @@ class Configurator(_Configurator):
         return app
 
 
-def require_https_tween_factory(handler, registry):
-    if not registry.settings.get('armonaut.require_https', True):
-        return handler
-
-    def require_https_tween(request):
-        if request.scheme != 'https':
-            resp = Response('SSL is required.',
-                            status=403,
-                            content_type='text/plain')
-            resp.status = '403 SSL is required'
-            return resp
-
-        return handler(request)
-    return require_https_tween
-
-
 def maybe_set(settings: typing.Dict[str, typing.Any],
               name: str,
               env: str,
@@ -197,9 +181,6 @@ def configure(settings=None) -> Configurator:
 
     # Register Domain predicates
     config.include('.domain')
-
-    # Block non-HTTPS in production
-    config.add_tween('armonaut.config.require_https_tween_factory')
 
     # Enable compression of our HTTP responses
     config.add_tween(

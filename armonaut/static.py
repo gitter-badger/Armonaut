@@ -124,7 +124,6 @@ def includeme(config):
             EXCVIEW
         ],
         under=[
-            'armonaut.config.require_https_tween_factory',
             INGRESS
         ]
     )
