@@ -21,7 +21,12 @@ before_install:
   - psql -c 'create database armonaut;' -U postgres
 
 install:
-  - python -m pip install -r requirements.txt -r dev-requirements.txt
+  - |
+    if [ "$SCRIPT" == "unit" ]; then
+      python -m pip install flake8
+    else
+      python -m pip install -r requirements.txt -r dev-requirements.txt
+    fi
 
 script:
   - |
