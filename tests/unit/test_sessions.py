@@ -14,6 +14,7 @@
 
 import pytest
 import time
+import pretend
 from armonaut.utils import crypto
 from armonaut.sessions import InvalidSession, Session
 
@@ -43,6 +44,7 @@ from armonaut.sessions import InvalidSession, Session
      'get_csrf_token',
      'new_csrf_token',
      'pop_flash',
+     'peek_flash',
      'should_save']
 )
 def test_invalid_session_methods(method):
@@ -96,6 +98,16 @@ def test_create_new_session_id(monkeypatch, data, expected):
     assert not session.invalidated
 
 
+def test_session_id_generated_once(monkeypatch):
+    monkeypatch.setattr(crypto, 'random_token', pretend.call_recorder(func=lambda: '12345678'))
+
+    session = Session({})
+    assert session.sid == '12345678'
+    assert session.sid == '12345678'
+
+    assert crypto.random_token.calls == [pretend.call()]
+
+
 def test_new_session_not_changed():
     """Assert that a session should not be saved on
     creation without modifications.
@@ -125,3 +137,105 @@ def test_session_changed(func, args, changed, expected):
 
     assert session.should_save() == changed
     assert session == expected
+
+
+def test_session_invalidated(monkeypatch):
+    sids = iter(['1', '2'])
+    monkeypatch.setattr(crypto, 'random_token', pretend.call_recorder(func=lambda: next(sids)))
+
+    session = Session({'foo': 'bar'})
+    assert session.sid == '1'
+
+    session.invalidate()
+
+    assert session.invalidated == {'1'}
+    assert not session.changed()
+    assert session.new
+    assert session == {}
+
+    assert session.sid == '2'
+    assert crypto.random_token.calls == [pretend.call(), pretend.call()]
+
+
+def test_session_invalidated_with_no_sid(monkeypatch):
+    monkeypatch.setattr(crypto, 'random_token', pretend.call_recorder(func=lambda: '1'))
+    session = Session()
+
+    session.invalidate()
+
+    assert session.invalidated == set([])
+    assert session.sid == '1'
+    assert crypto.random_token.calls == [pretend.call()]
+
+
+def test_session_flash_message_no_queue():
+    session = Session({})
+    session.flash('message')
+
+    assert session == {session._get_flash_queue_key(''): ['message']}
+    assert session.should_save()
+
+
+def test_session_flash_queue():
+    session = Session({})
+    session.flash('message', queue='queue')
+
+    assert session == {session._get_flash_queue_key('queue'): ['message']}
+    assert session.should_save()
+
+
+def test_session_pop_flash_no_queue():
+    session = Session({})
+    session.flash('message1')
+    session.flash('message2')
+
+    assert session.pop_flash() == ['message1', 'message2']
+
+
+def test_session_pop_flash_queues():
+    session = Session({})
+    session.flash('msg1', queue='queue1')
+    session.flash('msg2', queue='queue2')
+
+    assert session.pop_flash('queue1') == ['msg1']
+    assert session.pop_flash('queue2') == ['msg2']
+
+
+def test_session_peek_flash():
+    session = Session({})
+    session.flash('msg1')
+    session.flash('msg2', queue='queue')
+
+    assert session.peek_flash() == ['msg1']
+    assert session.peek_flash() == ['msg1']
+
+    assert session.peek_flash('queue') == ['msg2']
+    assert session.peek_flash('queue') == ['msg2']
+
+
+def test_session_flash_empty_queue():
+    session = Session({})
+
+    assert session.pop_flash() == []
+    assert session.peek_flash() == []
+
+    assert session.pop_flash('notfound') == []
+    assert session.peek_flash('notfound') == []
+
+
+@pytest.mark.parametrize('queue', ['', 'queue'])
+def test_session_flash_allow_duplicates(queue):
+    session = Session({})
+    session.flash('message', queue=queue, allow_duplicate=True)
+    session.flash('message', queue=queue, allow_duplicate=True)
+
+    assert session.pop_flash(queue=queue) == ['message', 'message']
+
+
+@pytest.mark.parametrize('queue', ['', 'queue'])
+def test_session_flash_no_allow_duplicates(queue):
+    session = Session({})
+    session.flash('message', queue=queue, allow_duplicate=False)
+    session.flash('message', queue=queue, allow_duplicate=False)
+
+    assert session.pop_flash(queue=queue) == ['message']

@@ -101,7 +101,6 @@ def _changed_method(method):
     def wrapped(self, *args, **kwargs):
         self.changed()
         return method(self, *args, **kwargs)
-
     return wrapped
 
 
@@ -117,20 +116,19 @@ class Session(dict):
     popitem = _changed_method(dict.popitem)
     update = _changed_method(dict.update)
 
+    def setdefault(self, k, default=None):
+        changed = k not in self
+        ret = dict.setdefault(self, k, default)
+        if changed:
+            self.changed()
+        return ret
+
     def __setitem__(self, key, value):
         # Don't mark the session as modified if the value doesn't change.
         if key in self and self[key] == value:
             return
         dict.__setitem__(self, key, value)
         self.changed()
-
-    def setdefault(self, key, default=None):
-        # Don't mark the session as modified if the value doesn't change.
-        if key in self:
-            return
-        dict.__setitem__(self, key, default)
-        self.changed()
-        return self[key]
 
     def __init__(self, data=None, session_id=None, new=True):
         if data is None:
@@ -170,8 +168,7 @@ class Session(dict):
 
     def flash(self, msg, queue='', allow_duplicate=True):
         queue_key = self._get_flash_queue_key(queue)
-
-        if not allow_duplicate and msg in self[queue_key]:
+        if not allow_duplicate and msg in self.get(queue_key, []):
             return
         self.setdefault(queue_key, []).append(msg)
 
