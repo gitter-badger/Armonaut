@@ -19,3 +19,4 @@ def includeme(config):
     config.add_route('index', '/')
 
     config.add_route('auth.login', '/auth/login', domain=armonaut)
+    config.add_route('auth.logout', '/auth/logout', domain=armonaut)

@@ -107,7 +107,6 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'mail.password', 'MAIL_PASSWORD')
     maybe_set(settings, 'mail.ssl', 'MAIL_SSL', default=True)
 
-    # TODO: Remove this after setting up Heroku TLS
     settings['armonaut.require_https'] = True
 
     # Setup our development environment
