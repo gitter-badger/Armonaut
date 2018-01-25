@@ -181,6 +181,9 @@ def configure(settings=None) -> Configurator:
     # Register support for celery tasks
     config.include('.tasks')
 
+    # Register support for sessions
+    config.include('.sessions')
+
     # Register support for rate-limiting
     config.include('.rate_limit')
 
