@@ -195,6 +195,9 @@ def configure(settings=None) -> Configurator:
     # Register XSS protections
     config.include('.xss')
 
+    # Register Domain predicates
+    config.include('.domain')
+
     # Block non-HTTPS in production
     config.add_tween('armonaut.config.require_https_tween_factory')
 
