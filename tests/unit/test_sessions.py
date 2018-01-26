@@ -251,6 +251,16 @@ def test_session_new_csrf_token(monkeypatch):
     assert session.should_save()
 
 
+def test_session_get_csrf_token_before_new_csrf_token(monkeypatch):
+    monkeypatch.setattr(crypto, 'random_token', pretend.call_recorder(lambda: '12345678'))
+
+    session = Session({})
+    csrf_token = session.get_csrf_token()
+
+    assert csrf_token == '12345678'
+    assert crypto.random_token.calls == [pretend.call()]
+
+
 def test_session_get_csrf_token_after_new_csrf_token(monkeypatch):
     monkeypatch.setattr(crypto, 'random_token', pretend.call_recorder(lambda: '12345678'))
 
