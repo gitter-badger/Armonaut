@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 
+- Added GitHub webhook verifier service.
 - Added basic login template.
 - Added BasicAuth and Session-based authentication.
 - Added password reset token service.

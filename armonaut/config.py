@@ -84,6 +84,10 @@ def configure(settings=None) -> Configurator:
 
     maybe_set(settings, 'sentry.dsn', 'SENTRY_DSN')
 
+    maybe_set(settings, 'github.oauth_id', 'GITHUB_OAUTH_ID')
+    maybe_set(settings, 'github.oauth_secret', 'GITHUB_OAUTH_SECRET')
+    maybe_set(settings, 'github.webhook_secret', 'GITHUB_WEBHOOK_SECRET')
+
     maybe_set(settings, 'mail.host', 'MAIL_HOST')
     maybe_set(settings, 'mail.port', 'MAIL_PORT')
     maybe_set(settings, 'mail.username', 'MAIL_USERNAME')
@@ -177,6 +181,9 @@ def configure(settings=None) -> Configurator:
 
     # Register Domain predicates
     config.include('.domain')
+
+    # Register Webhooks
+    config.include('.webhooks')
 
     # Enable compression of our HTTP responses
     config.add_tween(
