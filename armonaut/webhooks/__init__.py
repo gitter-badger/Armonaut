@@ -12,13 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut.webhooks.services import github_webhook_verifier_factory
-from armonaut.webhooks.interfaces import IWebhookVerifierService
-
 
 def includeme(config):
-    config.register_service_factory(
-        github_webhook_verifier_factory,
-        IWebhookVerifierService,
-        name='github.webhooks'
-    )
+    pass

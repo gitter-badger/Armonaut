@@ -12,9 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import hmac
 from armonaut import tasks
 
 
 @tasks.task(ignore_result=True, acks_late=True)
-def github_webhook(request):
-    request.headers['X-Hub-Signature']
+def process_github_webhook(request):
+
+    secret = ''  # TODO: Get the webhook secret from project.
+
+    # Verify the HMAC Signature against the webhook secret
+    signature = request.headers.get('X-Hub-Signature')
+    if signature is None:
+        return False
+
+    sigtype, signature = signature.split('=')
+
+    # Did Github change their signature algorithm?
+    if sigtype != 'sha1':
+        return False
+
+    mac = hmac.new(secret.encode('ascii'), msg=request.data, digestmod='sha1')
+    if not hmac.compare_digest(str(mac.hexdigest()), str(signature)):
+        return False
