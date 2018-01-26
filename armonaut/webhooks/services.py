@@ -21,6 +21,14 @@ def github_webhook_verifier_factory(context, request):
     return GithubWebhookVerifierService()
 
 
+def gitlab_webhook_verifier_factory(context, request):
+    return GitlabWebhookVerifierService()
+
+
+def bitbucket_webhook_verifier_factory(context, request):
+    return BitbucketWebhookVerifierService()
+
+
 @implementer(IWebhookVerifierService)
 class GithubWebhookVerifierService:
     def verify_webhook(self, request, secret):
@@ -37,4 +45,22 @@ class GithubWebhookVerifierService:
         mac = hmac.new(secret.decode('ascii'), msg=request.data, digestmod='sha1')
         if not hmac.compare_digest(str(mac.hexdigest()), str(signature)):
             return False
+        return True
+
+
+@implementer(IWebhookVerifierService)
+class GitlabWebhookVerifierService:
+    def verify_webhook(self, request, secret):
+        secret_token = request.headers.get('X-Gitlab-Token')
+        if secret_token is None:
+            return False
+
+        if secret_token != secret:
+            return False
+        return True
+
+
+@implementer(IWebhookVerifierService)
+class BitbucketWebhookVerifierService:
+    def verify_webhook(self, request, secret):
         return True

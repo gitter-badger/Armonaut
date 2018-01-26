@@ -86,7 +86,7 @@ class LoginForm(forms.Form):
         self.user_service = user_service
 
     def validate_password(self, field):
-        userid = self.user_service.find_userid(self.username.data)
+        userid = self.user_service.find_userid(self.email.data)
         if userid is not None:
             try:
                 if not self.user_service.check_password(userid, field.data):

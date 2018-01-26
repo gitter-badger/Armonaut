@@ -24,7 +24,7 @@ from armonaut.utils.http import is_safe_url
 
 @view_config(
     route_name='auth.login',
-    renderer='accounts/login.html',
+    renderer='auth/login.html',
     uses_session=True,
     require_csrf=True,
     require_methods=False
