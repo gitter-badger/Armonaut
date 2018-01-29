@@ -306,7 +306,7 @@ def test_session_factory_init(monkeypatch):
     assert timestamp_signer_create.calls == [
         pretend.call('secret', salt='session')
     ]
-    assert strict_redis_cls.calls == [
+    assert strict_redis_cls.from_url.calls == [
         pretend.call('url')
     ]
 
