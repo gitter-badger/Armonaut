@@ -15,8 +15,10 @@
 import pytest
 import time
 import pretend
+import redis
 from armonaut.utils import crypto
-from armonaut.sessions import InvalidSession, Session
+from armonaut.sessions import InvalidSession, Session, RedisSessionFactory
+from armonaut.cache import http
 
 
 @pytest.mark.parametrize(
@@ -282,3 +284,63 @@ def test_session_renew_csrf_token(monkeypatch):
     csrf2 = session.new_csrf_token()
     assert csrf2 == session.get_csrf_token()
     assert csrf1 != csrf2
+
+
+def test_session_factory_init(monkeypatch):
+    timestamp_signer_obj = pretend.stub()
+    timestamp_signer_create = pretend.call_recorder(
+        lambda secret, salt: timestamp_signer_obj
+    )
+    monkeypatch.setattr(crypto, 'TimestampSigner', timestamp_signer_create)
+
+    strict_redis_obj = pretend.stub()
+    strict_redis_cls = pretend.stub(
+        from_url=pretend.call_recorder(lambda url: strict_redis_obj)
+    )
+    monkeypatch.setattr(redis, 'StrictRedis', strict_redis_cls)
+
+    session_factory = RedisSessionFactory('secret', 'url')
+
+    assert session_factory.signer is timestamp_signer_obj
+    assert session_factory.redis is strict_redis_obj
+    assert timestamp_signer_create.calls == [
+        pretend.call('secret', salt='session')
+    ]
+    assert strict_redis_cls.calls == [
+        pretend.call('url')
+    ]
+
+
+def test_redis_key():
+    session_factory = RedisSessionFactory(
+        'secret', 'redis://localhost:6479/0'
+    )
+    assert session_factory._redis_key('session_id') == 'armonaut/session/data/session_id'
+
+
+def test_no_current_session(pyramid_request):
+    session_factory = RedisSessionFactory(
+        'secret', 'redis://localhost:6379/0'
+    )
+    session_factory._process_response = pretend.stub()
+    session = session_factory(pyramid_request)
+
+    assert len(pyramid_request.response_callbacks) == 1
+    assert pyramid_request.response_callbacks[0] is session_factory._process_response
+    assert isinstance(session, Session)
+    assert session._sid is None
+    assert session.new
+
+
+def test_invalid_session_id(pyramid_request):
+    pyramid_request.cookies['session_id'] = 'invalid'
+
+    session_factory = RedisSessionFactory('secret', 'redis://localhost:6379/0')
+    session_factory._process_response = pretend.stub()
+    session = session_factory(pyramid_request)
+
+    assert len(pyramid_request.response_callbacks) == 1
+    assert pyramid_request.response_callbacks[0] is session_factory._process_response
+    assert isinstance(session, Session)
+    assert session._sid is None
+    assert session.new
