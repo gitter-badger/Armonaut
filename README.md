@@ -11,9 +11,9 @@ Flexible, Scalable and Powerful Continuous Integration
 - 20+ Popular Languages
 - 100s of Services and Tools
 - Limitless Parallelization and Scalability
-- Variable Executor resources
+- Configurable executor resources
 - Integrates with GitHub, BitBucket, and GitLab projects
-- Tools for running and debugging builds locally with Virtualbox
+- Tools for running and debugging builds locally with Vagrant
 
 ## Contributing
 
@@ -37,30 +37,27 @@ View the latest releases and changes within the same file.
 The template for the Armonaut web application is based heavily on [Warehouse](https://github.com/pypa/warehouse)
 which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/master/LICENSE).
 
-Armonaut would not be possible without the following Open Source libraries:
-
-### Intrastructure
-
-[Redis](https://redis.io/) (BSD-3),
-[PostgreSQL](https://www.postgresql.org/) (BSD-like)
-
-### Python Libraries
+Armonaut would not be possible without the following Open Source projects:
 
 [alembic](https://bitbucket.org/zzzeek/alembic) (MIT),
 [argon2-cffi](https://github.com/hynek/argon2_cffi) (MIT),
+[Bootstrap](https://getbootstrap.com/) (MIT),
 [boto3](https://boto3.readthedocs.io/en/latest/) (Apache-2.0),
 [celery](http://celeryproject.org/) (BSD),
 [celery-redbeat](https://github.com/sibson/redbeat) (Apache-2.0),
 [click](http://github.com/mitsuhiko/click) (BSD),
 [disposable-email-domains](https://github.com/di/disposable-email-domains) (MIT),
 [first](https://github.com/hynek/first/) (MIT),
+[Gulp](https://github.com/gulpjs/gulp) (MIT),
 [gunicorn](http://gunicorn.org/) (MIT),
 [houdini.py](http://python-houdini.61924.nl/) (MIT),
 [itsdangerous](http://github.com/mitsuhiko/itsdangerous) (BSD),
+[jQuery](https://jquery.org) (MIT)
 [limits](https://limits.readthedocs.org/) (MIT),
 [misaka](https://github.com/FSX/misaka) (MIT),
 [msgpack-python](http://msgpack.org/) (Apache-2.0),
 [passlib](https://bitbucket.org/ecollins/passlib) (BSD),
+[PostgreSQL](https://www.postgresql.org/) (BSD-like)
 [psycopg2](http://initd.org/psycopg/) (LGPL),
 [pusher](https://github.com/pusher/pusher-http-python) (MIT),
 [pygments](http://pygments.org/) (BSD),
@@ -72,7 +69,8 @@ Armonaut would not be possible without the following Open Source libraries:
 [pyramid-services](https://github.com/mmerickel/pyramid_services) (MIT),
 [pyramid-tm](http://docs.pylonsproject.org/projects/pyramid-tm/en/latest/) (BSD-like),
 [raven](https://github.com/getsentry/raven-python) (BSD),
-[redis](http://github.com/andymccurdy/redis-py) (MIT),
+[Redis](https://redis.io/) (BSD-3),
+[redis-py](http://github.com/andymccurdy/redis-py) (MIT),
 [sqlalchemy](http://sqlalchemy.org/) (MIT),
 [structlog](http://www.structlog.org/) (Apache-2.0),
 [whitenoise](http://whitenoise.evans.io/) (MIT),
@@ -80,12 +78,6 @@ Armonaut would not be possible without the following Open Source libraries:
 [zope.interface](https://github.com/zopefoundation/zope.interface) (ZPL),
 [zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL), and
 [zxcvbn-python](https://github.com/dwolfhub/zxcvbn-python) (MIT)
-
-### JavaScript Libraries
-
-[Bootstrap](https://getbootstrap.com/) (MIT),
-[Gulp](https://github.com/gulpjs/gulp) (MIT),
-[jQuery](https://jquery.org) (MIT)
 
 ## Services
 

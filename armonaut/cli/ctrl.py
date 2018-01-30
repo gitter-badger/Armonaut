@@ -62,9 +62,14 @@ def down():
 def test(test_path):
     os.system('docker-compose build web')
     os.system('docker-compose build worker')
-    os.system(f'docker-compose run --rm web pytest {test_path}')
+    os.system(f'docker-compose run --rm web pytest -v {test_path}')
 
 
 @ctrl.command()
 def shell():
     os.system('docker-compose run --rm web bash')
+
+
+@ctrl.command()
+def lint():
+    os.system('flake8')

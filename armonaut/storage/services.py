@@ -25,8 +25,8 @@ def spaces_session_factory(context, request):
 
     return boto3.session.Session(
         endpoint_url='https://nyc3.digitaloceanspaces.com',
-        aws_access_key_id=request.registry.settings['spaces.access_key'],
-        aws_secret_access_key=request.registry.settings['spaces.secret_key'],
+        aws_access_key_id=request.registry.settings['spaces.api_id'],
+        aws_secret_access_key=request.registry.settings['spaces.api_secret'],
         **kwargs
     )
 

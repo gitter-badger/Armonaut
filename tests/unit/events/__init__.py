@@ -11,14 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from armonaut import tasks
-
-
-@tasks.task()
-def send_event(request, channels, event, data):
-    request.pusher.trigger(
-        channels=channels,
-        event_name=event,
-        data=data
-    )

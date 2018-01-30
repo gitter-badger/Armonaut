@@ -23,12 +23,15 @@ def test_includeme(monkeypatch):
     monkeypatch.setattr(pusher, 'Pusher', pusher_cls)
 
     config = pretend.stub(
-        registry=pretend.stub(settings={
-            'pusher.app_id': 'APP_ID',
-            'pusher.api_id': 'API_ID',
-            'pusher.api_secret': 'API_SECRET',
-            'pusher.region': 'REGION'
-        }),
+        registry=pretend.stub(
+            settings={
+                'pusher.app_id': 'APP_ID',
+                'pusher.api_id': 'API_ID',
+                'pusher.api_secret': 'API_SECRET',
+                'pusher.region': 'REGION'
+            },
+            __setitem__=pretend.call_recorder(lambda *args, **kwargs: None)
+        ),
         add_request_method=pretend.call_recorder(lambda *args, **kwargs: None)
     )
 
@@ -41,3 +44,4 @@ def test_includeme(monkeypatch):
         cluster='REGION'
     )]
     assert config.add_request_method.calls == [pretend.call(_pusher, name='pusher', reify=True)]
+    assert config.registry.__setitem__.calls == [pretend.call('pusher.client', pusher_obj)]

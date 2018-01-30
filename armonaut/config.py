@@ -84,8 +84,8 @@ def configure(settings=None) -> Configurator:
 
     maybe_set(settings, 'sentry.dsn', 'SENTRY_DSN')
 
-    maybe_set(settings, 'spaces.access_key', 'SPACES_ACCESS_KEY')
-    maybe_set(settings, 'spaces.secret_key', 'SPACES_SECRET_KEY')
+    maybe_set(settings, 'spaces.api_id', 'SPACES_API_ID')
+    maybe_set(settings, 'spaces.api_secret', 'SPACES_API_SECRET')
     maybe_set(settings, 'spaces.region', 'SPACES_REGION')
     maybe_set(settings, 'spaces.bucket', 'SPACES_BUCKET')
 
