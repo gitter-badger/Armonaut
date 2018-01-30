@@ -6,6 +6,11 @@ services:
   - postgresql
   - redis-server
 
+cache:
+  pip: true
+  directories:
+    - ~/.cache
+
 env:
   global:
     - ARMONAUT_ENV=development
