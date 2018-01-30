@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pyramid.view import view_config
 
-def includeme(config):
-    armonaut = config.get_settings().get('armonaut.domain')
 
-    config.add_route('index', '/')
-
-    config.add_route('auth.login', '/auth/login', domain=armonaut)
-    config.add_route('auth.logout', '/auth/logout', domain=armonaut)
-    config.add_route('auth.pusher', '/auth/pusher', domain=armonaut)
+@view_config(
+    route_name='auth.pusher',
+    uses_session=True,
+    require_csrf=True,
+    require_methods=False
+)
+def auth_pusher():
+    pass  # TODO: Authorize based on session information and project stream

@@ -41,7 +41,7 @@ class SpacesObjectStorage:
     def create_service(cls, context, request):
         return cls(
             request.registry.settings['spaces.bucket'],
-            request.find_service('spaces.session')
+            request.find_service(name='spaces.session')
         )
 
     def create_presigned_url(self, method, path, expires_in):

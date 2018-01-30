@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from armonaut import tasks
 
-def includeme(config):
-    armonaut = config.get_settings().get('armonaut.domain')
 
-    config.add_route('index', '/')
-
-    config.add_route('auth.login', '/auth/login', domain=armonaut)
-    config.add_route('auth.logout', '/auth/logout', domain=armonaut)
-    config.add_route('auth.pusher', '/auth/pusher', domain=armonaut)
+@tasks.task()
+def send_event(request, channels, event, data):
+    request.pusher.trigger(
+        channels,
+        event,
+        data
+    )

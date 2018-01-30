@@ -89,9 +89,13 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'spaces.region', 'SPACES_REGION')
     maybe_set(settings, 'spaces.bucket', 'SPACES_BUCKET')
 
+    maybe_set(settings, 'pusher.app_id', 'PUSHER_APP_ID')
+    maybe_set(settings, 'pusher.api_id', 'PUSHER_API_ID')
+    maybe_set(settings, 'pusher.api_secret', 'PUSHER_API_SECRET')
+    maybe_set(settings, 'pusher.region', 'PUSHER_REGION')
+
     maybe_set(settings, 'github.oauth_id', 'GITHUB_OAUTH_ID')
     maybe_set(settings, 'github.oauth_secret', 'GITHUB_OAUTH_SECRET')
-    maybe_set(settings, 'github.webhook_secret', 'GITHUB_WEBHOOK_SECRET')
 
     maybe_set(settings, 'mail.host', 'MAIL_HOST')
     maybe_set(settings, 'mail.port', 'MAIL_PORT')
@@ -192,6 +196,9 @@ def configure(settings=None) -> Configurator:
 
     # Register Object Storage
     config.include('.storage')
+
+    # Register Event PubSub
+    config.include('.events')
 
     # Enable compression of our HTTP responses
     config.add_tween(

@@ -62,6 +62,7 @@ Armonaut would not be possible without the following Open Source libraries:
 [msgpack-python](http://msgpack.org/) (Apache-2.0),
 [passlib](https://bitbucket.org/ecollins/passlib) (BSD),
 [psycopg2](http://initd.org/psycopg/) (LGPL),
+[pusher](https://github.com/pusher/pusher-http-python) (MIT),
 [pygments](http://pygments.org/) (BSD),
 [pyramid](https://trypyramid.com/) (ZPL),
 [pyramid-jinja2](https://github.com/Pylons/pyramid_jinja2) (BSD-like),

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added Event PubSub support with Pusher.
+- Added Object Storage support with DigitalOcean Spaces.
 - Added Projects, Roles, and Accounts.
 - Added GitLab webhook service.
 - Added BitBucket webhook service.

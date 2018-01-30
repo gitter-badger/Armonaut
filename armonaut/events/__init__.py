@@ -12,12 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pusher
+
+EVENT_NEW_BUILD = 'new-build'
+EVENT_JOB_STATUS = 'job-status'
+EVENT_BUILD_STATUS = 'build-status'
+
+
+def _pusher(request):
+    return request.registry['pusher.client']
+
 
 def includeme(config):
-    armonaut = config.get_settings().get('armonaut.domain')
+    client = pusher.Pusher(
+        app_id=config.settings['pusher.app_id'],
+        key=config.settings['pusher.api_id'],
+        secret=config.settings['pusher.api_secret'],
+        cluster=config.settings['pusher.region']
+    )
+    config.registry['pusher.client'] = client
 
-    config.add_route('index', '/')
-
-    config.add_route('auth.login', '/auth/login', domain=armonaut)
-    config.add_route('auth.logout', '/auth/logout', domain=armonaut)
-    config.add_route('auth.pusher', '/auth/pusher', domain=armonaut)
+    config.add_request_method(_pusher, name='pusher', reify=True)
