@@ -12,18 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def test_index(webtest):
-    """Assert that the application is capable of returning 200.
-    """
-    resp = webtest.get('/')
-
-    assert resp.status_code == 200
-    assert resp.content_type == 'text/html'
+from zope.interface import Interface
 
 
-def test_not_found(webtest):
-    """Assert that the application is capable of returning 400.
-    """
-    resp = webtest.get('/asdasdasd/', status=404)
+class IObjectStorage(Interface):
+    def create_service(context, request):
+        raise NotImplementedError()
 
-    assert resp.status_code == 404
+    def create_presigned_url(method, path, expires_in):
+        raise NotImplementedError()

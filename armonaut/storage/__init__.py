@@ -12,18 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-def test_index(webtest):
-    """Assert that the application is capable of returning 200.
-    """
-    resp = webtest.get('/')
-
-    assert resp.status_code == 200
-    assert resp.content_type == 'text/html'
+from armonaut.storage.interfaces import IObjectStorage
+from armonaut.storage.services import spaces_session_factory, SpacesObjectStorage
 
 
-def test_not_found(webtest):
-    """Assert that the application is capable of returning 400.
-    """
-    resp = webtest.get('/asdasdasd/', status=404)
-
-    assert resp.status_code == 404
+def includeme(config):
+    config.register_service_factory(spaces_session_factory, name='spaces.session')
+    config.register_service_factory(SpacesObjectStorage.create_service, IObjectStorage)

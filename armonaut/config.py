@@ -84,6 +84,11 @@ def configure(settings=None) -> Configurator:
 
     maybe_set(settings, 'sentry.dsn', 'SENTRY_DSN')
 
+    maybe_set(settings, 'spaces.access_key', 'SPACES_ACCESS_KEY')
+    maybe_set(settings, 'spaces.secret_key', 'SPACES_SECRET_KEY')
+    maybe_set(settings, 'spaces.region', 'SPACES_REGION')
+    maybe_set(settings, 'spaces.bucket', 'SPACES_BUCKET')
+
     maybe_set(settings, 'github.oauth_id', 'GITHUB_OAUTH_ID')
     maybe_set(settings, 'github.oauth_secret', 'GITHUB_OAUTH_SECRET')
     maybe_set(settings, 'github.webhook_secret', 'GITHUB_WEBHOOK_SECRET')
@@ -184,6 +189,9 @@ def configure(settings=None) -> Configurator:
 
     # Register Webhooks
     config.include('.webhooks')
+
+    # Register Object Storage
+    config.include('.storage')
 
     # Enable compression of our HTTP responses
     config.add_tween(

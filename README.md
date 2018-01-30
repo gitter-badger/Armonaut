@@ -39,8 +39,16 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 
 Armonaut would not be possible without the following Open Source libraries:
 
+### Intrastructure
+
+[Redis](https://redis.io/) (BSD-3),
+[PostgreSQL](https://www.postgresql.org/) (BSD-like)
+
+### Python Libraries
+
 [alembic](https://bitbucket.org/zzzeek/alembic) (MIT),
 [argon2-cffi](https://github.com/hynek/argon2_cffi) (MIT),
+[boto3](https://boto3.readthedocs.io/en/latest/) (Apache-2.0),
 [celery](http://celeryproject.org/) (BSD),
 [celery-redbeat](https://github.com/sibson/redbeat) (Apache-2.0),
 [click](http://github.com/mitsuhiko/click) (BSD),
@@ -69,8 +77,25 @@ Armonaut would not be possible without the following Open Source libraries:
 [whitenoise](http://whitenoise.evans.io/) (MIT),
 [wtforms](http://wtforms.simplecodes.com/) (BSD),
 [zope.interface](https://github.com/zopefoundation/zope.interface) (ZPL),
-[zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL),
+[zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL), and
 [zxcvbn-python](https://github.com/dwolfhub/zxcvbn-python) (MIT)
+
+### JavaScript Libraries
+
+[Bootstrap](https://getbootstrap.com/) (MIT),
+[Gulp](https://github.com/gulpjs/gulp) (MIT),
+[jQuery](https://jquery.org) (MIT)
+
+## Services
+
+Powered by [CloudFlare](https://www.cloudflare.com/),
+DigitalOcean [Droplets](https://www.digitalocean.com/products/droplets/) &
+[Spaces](https://www.digitalocean.com/products/spaces/),
+[Heroku](https://heroku.com),
+[Pusher](https://pusher.com/),
+[Ubuntu](https://www.ubuntu.com/),
+[Stripe](https://stripe.com/), and
+[Sentry](https://sentry.io)
 
 ## License
 

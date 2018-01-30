@@ -1,5 +1,6 @@
 alembic
 argon2-cffi
+boto3
 click
 celery
 celery-redbeat
