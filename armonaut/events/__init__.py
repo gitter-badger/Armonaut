@@ -25,10 +25,10 @@ def _pusher(request):
 
 def includeme(config):
     client = pusher.Pusher(
-        app_id=config.settings['pusher.app_id'],
-        key=config.settings['pusher.api_id'],
-        secret=config.settings['pusher.api_secret'],
-        cluster=config.settings['pusher.region']
+        app_id=config.registry.settings['pusher.app_id'],
+        key=config.registry.settings['pusher.api_id'],
+        secret=config.registry.settings['pusher.api_secret'],
+        cluster=config.registry.settings['pusher.region']
     )
     config.registry['pusher.client'] = client
 
