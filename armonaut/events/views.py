@@ -19,7 +19,8 @@ from pyramid.view import view_config
     route_name='auth.pusher',
     uses_session=True,
     require_csrf=True,
-    require_methods=False
+    require_methods=False,
+    permission='project:read'
 )
 def auth_pusher():
     pass  # TODO: Authorize based on session information and project stream

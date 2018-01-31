@@ -38,6 +38,9 @@ class Account(Model):
     __tablename__ = 'accounts'
 
     username = Column(String(255), nullable=False, index=True)
+    display_name = Column(Text, nullable=False)
+    avatar_url = Column(Text, nullable=False)
+
     access_token = Column(Text, nullable=False)
     refresh_token = Column(Text, nullable=False)
 

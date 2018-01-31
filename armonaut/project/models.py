@@ -14,7 +14,8 @@
 
 import enum
 from sqlalchemy import Column, Enum, String, UniqueConstraint, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, object_session, lazyload, joinedload
+from pyramid.authorization import Allow, Everyone
 from armonaut.db import Model
 
 
@@ -33,8 +34,8 @@ class Role(Model):
     __tablename__ = 'roles'
 
     role_type = Column(Enum(RoleType), nullable=False)
-    user = relationship('Account', uselist=False, back_populates='roles')
-    user_id = Column(
+    account = relationship('Account', uselist=False, back_populates='roles')
+    account_id = Column(
         ForeignKey('accounts.id', onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False
     )
@@ -56,6 +57,8 @@ class Project(Model):
     name = Column(String(255), nullable=False, index=True)
     owner = Column(String(255), nullable=False, index=True)
 
+    public = Column(Boolean, nullable=False)
+
     webhook_id = Column(String)
     webhook_secret = Column(String(255))
 
@@ -65,3 +68,22 @@ class Project(Model):
     @property
     def slug(self):
         return f'{str(self.host)}/{self.owner}/{self.name}'
+
+    def __acl__(self):
+        session = object_session(self)
+        acls = [(Allow, 'group:admins', ['admin'])]
+
+        query = session.query(Role).filter(Role.project == self)
+        query = query.options(lazyload('project'))
+        query = query.options(joinedload('account').joinedload('account.user_id'))
+
+        for role in sorted(query.all(), key=lambda x: [RoleType.OWNER, RoleType.COLLABORATOR].index(x)):
+            if role.role_type == RoleType.OWNER:
+                acls.append((Allow, str(role.account.user_id), ['project:manage', 'project:read']))
+            elif role.role_type == RoleType.COLLABORATOR:
+                acls.append((Allow, str(role.account.user_id), ['project:read']))
+
+        if self.public:
+            acls.append((Allow, Everyone, ['project:read']))
+
+        return acls
