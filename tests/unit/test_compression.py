@@ -122,7 +122,7 @@ def test_buffers_small_streaming():
 
 
 def test_does_not_compress_small_bodies():
-    body = b'x' * 100
+    body = b'foo'
 
     request = pretend.stub(accept_encoding=Accept('gzip'))
     response = Response(body=body)
