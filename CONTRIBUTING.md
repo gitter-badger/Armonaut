@@ -298,8 +298,36 @@ instead of 79 due to modern IDEs and screen sizes.
 You can run this command whenever the virtualenv is active:
 
 ```bash
-flake8
+python -m armonaut ctrl lint
 ```
+
+### Style Guide
+
+- In general follow [PEP8](https://www.python.org/dev/peps/pep-0008/#module-level-dunder-names).
+- Use single quotes (`'`) for single-line strings.
+- Use triple-double quotes (`"""`) for doc-strings.
+- Docstrings should have no spaces after triple-double quotes
+  and should end with the closing triple-double quotes on their own line.
+  ```python
+  def function():
+      """This is a doc-string.
+      """
+      return 'ret'
+  ```
+- Doc-string parameters and return types should be like this:
+  ```python
+  def add(x, y):
+      """Adds two integers
+
+      :param x: Operand 1
+      :param y: Operand 2
+      :type x: int
+      :type y: int
+      :rtype: int
+      :returns: Sum of two integers
+      """
+      return x + y
+  ```
 
 ## Additional Documentation
 

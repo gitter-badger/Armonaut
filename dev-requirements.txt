@@ -10,3 +10,4 @@ pytest-cov
 pytest-needle
 dsnparse
 pretend
+webob==1.7.4
