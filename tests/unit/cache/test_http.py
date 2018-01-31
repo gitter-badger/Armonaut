@@ -14,8 +14,10 @@
 
 import pytest
 import pretend
-from armonaut.cache.http import (cache_control, add_vary,
-                                 conditional_http_tween_factory, includeme)
+from armonaut.cache.http import (
+    cache_control, add_vary,
+    conditional_http_tween_factory, includeme
+)
 
 
 def test_cache_public():

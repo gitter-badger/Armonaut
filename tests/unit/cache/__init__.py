@@ -11,20 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-def test_index(webtest):
-    """Assert that the application is capable of returning 200.
-    """
-    resp = webtest.get('/')
-
-    assert resp.status_code == 200
-    assert resp.content_type == 'text/html'
-
-
-def test_not_found(webtest):
-    """Assert that the application is capable of returning 400.
-    """
-    resp = webtest.get('/asdasdasd/', status=404)
-
-    assert resp.status_code == 404
