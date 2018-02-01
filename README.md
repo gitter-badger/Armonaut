@@ -3,6 +3,7 @@
 [![Travis](https://img.shields.io/travis/SethMichaelLarson/Armonaut/master.svg)](https://travis-ci.org/SethMichaelLarson/Armonaut)
 [![Codecov](https://img.shields.io/codecov/c/github/SethMichaelLarson/Armonaut/master.svg)](https://codecov.io/gh/SethMichaelLarson/Armonaut)
 [![Slack](https://img.shields.io/badge/slack-%23dev-brightgreen.svg)](https://armonaut.slack.com)
+[![StackShare](https://img.shields.io/badge/stack-stackshare-0690fa.svg?style=flat)](https://stackshare.io/armonaut/armonaut-web-application)
 
 Flexible, Scalable and Powerful Continuous Integration
 
@@ -32,12 +33,16 @@ Whenever a change is made to the functionality of Armonaut an entry is added to
 [`CHANGELOG.md`](https://github.com/SethMichaelLarson/Armonaut/blob/master/CHANGELOG.md).
 View the latest releases and changes within the same file.
 
-## Open Source
+## Stack
 
-The template for the Armonaut web application is based heavily on [Warehouse](https://github.com/pypa/warehouse)
-which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/master/LICENSE).
+You can find a [high-level view of our stack on Stackshare](https://stackshare.io/armonaut/armonaut-web-application).
+
+### Open Source
 
 Armonaut would not be possible without the following Open Source projects:
+
+The template for the Armonaut web application is based heavily on [Warehouse](https://github.com/pypa/warehouse)
+which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/master/LICENSE). 
 
 [alembic](https://bitbucket.org/zzzeek/alembic) (MIT),
 [argon2-cffi](https://github.com/hynek/argon2_cffi) (MIT),
@@ -79,7 +84,7 @@ Armonaut would not be possible without the following Open Source projects:
 [zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL), and
 [zxcvbn-python](https://github.com/dwolfhub/zxcvbn-python) (MIT)
 
-## Services
+### Services
 
 Powered by [CloudFlare](https://www.cloudflare.com/),
 DigitalOcean [Droplets](https://www.digitalocean.com/products/droplets/) &
