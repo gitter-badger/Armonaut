@@ -3,7 +3,6 @@
 [![Travis](https://img.shields.io/travis/SethMichaelLarson/Armonaut/master.svg)](https://travis-ci.org/SethMichaelLarson/Armonaut)
 [![Codecov](https://img.shields.io/codecov/c/github/SethMichaelLarson/Armonaut/master.svg)](https://codecov.io/gh/SethMichaelLarson/Armonaut)
 [![Slack](https://img.shields.io/badge/slack-%23dev-brightgreen.svg)](https://armonaut.slack.com)
-[![StackShare](https://img.shields.io/badge/stack-stackshare-0690fa.svg?style=flat)](https://stackshare.io/armonaut/armonaut-web-application)
 
 Flexible, Scalable and Powerful Continuous Integration
 
@@ -33,11 +32,7 @@ Whenever a change is made to the functionality of Armonaut an entry is added to
 [`CHANGELOG.md`](https://github.com/SethMichaelLarson/Armonaut/blob/master/CHANGELOG.md).
 View the latest releases and changes within the same file.
 
-## Stack
-
-You can find a [high-level view of our stack on Stackshare](https://stackshare.io/armonaut/armonaut-web-application).
-
-### Open Source
+## Open Source
 
 Armonaut would not be possible without the following Open Source projects:
 
@@ -52,6 +47,7 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [celery-redbeat](https://github.com/sibson/redbeat) (Apache-2.0),
 [click](http://github.com/mitsuhiko/click) (BSD),
 [disposable-email-domains](https://github.com/di/disposable-email-domains) (MIT),
+[Docker](https://github.com/moby/moby) (Apache-2.0),
 [first](https://github.com/hynek/first/) (MIT),
 [Gulp](https://github.com/gulpjs/gulp) (MIT),
 [gunicorn](http://gunicorn.org/) (MIT),
@@ -83,17 +79,6 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [zope.interface](https://github.com/zopefoundation/zope.interface) (ZPL),
 [zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL), and
 [zxcvbn-python](https://github.com/dwolfhub/zxcvbn-python) (MIT)
-
-### Services
-
-Powered by [CloudFlare](https://www.cloudflare.com/),
-DigitalOcean [Droplets](https://www.digitalocean.com/products/droplets/) &
-[Spaces](https://www.digitalocean.com/products/spaces/),
-[Heroku](https://heroku.com),
-[Pusher](https://pusher.com/),
-[Ubuntu](https://www.ubuntu.com/),
-[Stripe](https://stripe.com/), and
-[Sentry](https://sentry.io)
 
 ## License
 
