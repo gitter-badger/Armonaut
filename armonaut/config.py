@@ -164,9 +164,6 @@ def configure(settings=None) -> Configurator:
     # Register support for services
     config.include('pyramid_services')
 
-    # Register emailing tasks
-    config.include('pyramid_mailer')
-
     # Register support for database connections
     config.include('.db')
 

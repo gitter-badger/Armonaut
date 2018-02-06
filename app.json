@@ -1,7 +1,6 @@
 {
   "name": "Armonaut",
   "description": "One-Click to Deploy Continuous Integration and Delivery",
-  "logo": "",
   "keywords": [
     "armonaut",
     "continuous-integration",
@@ -25,7 +24,7 @@
     {
       "plan": "heroku-postgresql:hobby-dev",
       "options": {
-        "version": "10.1"
+        "version": "10"
       }
     },
     {
