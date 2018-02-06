@@ -22,10 +22,9 @@ class User(Model):
     __tablename__ = 'users'
 
     github_id = Column(BigInteger, nullable=False, index=True)
-    username = Column(String(255), nullable=False, index=True)
+    username = Column(String(255), nullable=False, index=True, unique=True)
     display_name = Column(Text, nullable=False)
     avatar_url = Column(Text, nullable=False)
-
     access_token = Column(Text, nullable=False)
 
     is_superuser = Column(Boolean, nullable=False)

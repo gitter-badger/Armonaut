@@ -80,6 +80,8 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'sessions.secret', 'ARMONAUT_SECRET')
 
+    maybe_set(settings, 'oauth.url', 'REDIS_URL')
+
     maybe_set(settings, 'logging.level', 'LOGGING_LEVEL')
 
     maybe_set(settings, 'sentry.dsn', 'SENTRY_DSN')

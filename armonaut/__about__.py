@@ -13,6 +13,6 @@
 # limitations under the License.
 
 __title__ = 'armonaut'
-__version__ = '1.0.0b1'
+__version__ = '1.0.0'
 __author__ = 'Seth Michael Larson'
 __license__ = 'Apache-2.0'

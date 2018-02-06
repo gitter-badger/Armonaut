@@ -12,16 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_multiauth import MultiAuthenticationPolicy
-from armonaut.auth.services import database_login_factory, user_token_factory
-from armonaut.auth.interfaces import IUserService, IUserTokenService
-from armonaut.auth.policies import BasicAuthAuthenticationPolicy, SessionAuthenticationPolicy
-from armonaut.rate_limit import RateLimit, IRateLimiter
+from armonaut.auth.services import database_login_factory, oauth_state_factory
+from armonaut.auth.interfaces import IUserService, IOAuthStateService
+from armonaut.auth.policies import SessionAuthenticationPolicy
 
 
 REDIRECT_FIELD_NAME = 'next'
+OAUTH_SCOPES = ' '.join(['user', 'user:email', 'repo', 'repo:status', 'repo_deployment', 'read:org', 'write:repo_hook'])
 
 
 def _authenticate(userid, request):
@@ -47,7 +46,7 @@ def _user(request):
 
 def includeme(config):
     config.register_service_factory(database_login_factory, IUserService)
-    config.register_service_factory(user_token_factory, IUserTokenService)
+    config.register_service_factory(oauth_state_factory, IOAuthStateService)
 
     config.set_authentication_policy(
         MultiAuthenticationPolicy([
@@ -58,15 +57,3 @@ def includeme(config):
 
     # Add a request method adds a `user` object.
     config.add_request_method(_user, name='user', reify=True)
-
-    # Register rate limits to user for login attempts
-    config.register_service_factory(
-        RateLimit('10 per 5 minutes'),
-        IRateLimiter,
-        name='user.login'
-    )
-    config.register_service_factory(
-        RateLimit('1000 per 5 minutes'),
-        IRateLimiter,
-        name='global.login'
-    )

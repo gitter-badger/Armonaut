@@ -4,15 +4,16 @@
 [![Codecov](https://img.shields.io/codecov/c/github/SethMichaelLarson/Armonaut/master.svg)](https://codecov.io/gh/SethMichaelLarson/Armonaut)
 [![Slack](https://img.shields.io/badge/slack-%23dev-brightgreen.svg)](https://armonaut.slack.com)
 
-Flexible, Scalable and Powerful Continuous Integration
+Simple, Flexible, and Scalable Continuous Integration
 
 ## Features
 
 - 20+ Popular Languages
-- 100s of Services and Tools
+- Customizable Machine Images
+- Hundreds of Services and Tools
 - Limitless Parallelization and Scalability
 - Configurable executor resources
-- Integrates with GitHub, BitBucket, and GitLab projects
+- Integrates with GitHub, Slack, and Gitter
 - Tools for running and debugging builds locally with Vagrant
 
 ## Contributing

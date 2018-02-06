@@ -15,16 +15,16 @@
 from zope.interface import Interface
 
 
-class TooManyFailedLogins(Exception):
-    def __init__(self, *args, resets_in, **kwargs):
-        self.resets_in = resets_in
-        super(TooManyFailedLogins, self).__init__(*args, **kwargs)
+class IOAuthStateService(Interface):
+    def create_state():
+        """
+        Creates a state token with a timeout
+        """
 
-
-class InvalidPasswordResetToken(Exception):
-    def __init__(self, message, *args, **kwargs):
-        self.message = message
-        super(InvalidPasswordResetToken, self).__init__(*args, **kwargs)
+    def check_state(state):
+        """
+        Checks a state token to see if it's valid
+        """
 
 
 class IUserService(Interface):
@@ -34,40 +34,12 @@ class IUserService(Interface):
         or None if there is no user for that ID.
         """
 
-    def find_userid(email):
+    def find_userid(username):
         """
         Returns the user ID of a user for the given username.
-        """
-
-    def check_password(user_id, password):
-        """
-        Returns a boolean representing whether the given password
-        is valid for the given userid
-        """
-
-    def create_user(email, password):
-        """
-        Attempts to create a new user with the given attributes.
         """
 
     def update_user(user_id, **changes):
         """
         Updates the user object
-        """
-
-    def verify_user(user_id, email):
-        """
-        Verifies the user
-        """
-
-
-class IUserTokenService(Interface):
-    def generate_token(user):
-        """
-        Generates a unique token based on user attributes
-        """
-
-    def get_user_by_token(token):
-        """
-        Gets the user corresponding to the token provided
         """

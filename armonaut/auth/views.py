@@ -13,51 +13,57 @@
 # limitations under the License.
 
 import datetime
-from pyramid.httpexceptions import HTTPSeeOther
+from urllib.parse import urlencode
+from pyramid.httpexceptions import HTTPSeeOther, HTTPBadRequest
 from pyramid.security import remember, forget
 from pyramid.view import view_config
-from armonaut.auth import REDIRECT_FIELD_NAME
-from armonaut.auth.forms import LoginForm
-from armonaut.auth.interfaces import IUserService
+from armonaut.auth import REDIRECT_FIELD_NAME, OAUTH_SCOPES
+from armonaut.auth.interfaces import IUserService, IOAuthStateService
 from armonaut.utils.http import is_safe_url
 
 
 @view_config(
-    route_name='auth.login',
-    renderer='auth/login.html',
+    route_name='auth.authorize',
     uses_session=True,
     require_csrf=True,
-    require_methods=False
+    require_methods=['GET']
 )
-def login(request, redirect_field_name=REDIRECT_FIELD_NAME,
-          _form_class=LoginForm):
+def authorize(request):
+    state_service = request.find_service(IOAuthStateService, context=None)
+    state = state_service.create_state()
+    query = urlencode({
+        'state': state,
+        'scopes': OAUTH_SCOPES,
+        'client_id': request.registry.settings['github.oauth_id'],
+        'allow_signup': 'true'
+    })
+    resp = HTTPSeeOther(
+        f'https://github.com/login/oauth/authorize?{query}'
+    )
+    return resp
+
+
+@view_config(
+    route_name='auth.callback',
+    uses_session=True,
+    require_csrf=True,
+    require_methods=['GET']
+)
+def callback(request):
+    state = request.GET.get('state')
+    code = request.GET.get('code')
+
+    if code is None or state is None:
+        return HTTPBadRequest('Invalid OAuth callback')
+
+    state_service = request.find_service(IOAuthStateService, context=None)
+    if not state_service.check_state(state):
+        return HTTPBadRequest('Expired OAuth state token. Try authorizing again.')
+
     user_service = request.find_service(IUserService, context=None)
+    user_service.
 
-    redirect_to = request.POST.get(redirect_field_name,
-                                   request.GET.get(redirect_field_name))
-    form = _form_class(request.POST, user_service=user_service)
-
-    if request.method == 'POST' and form.validate():
-        email = form.email.data
-        userid = user_service.find_userid(email)
-
-        # Make sure that the ?next=[URL] parameter is safe to redirect to.
-        if (not redirect_to or
-                not is_safe_url(url=redirect_to, host=request.host)):
-            redirect_to = '/'
-
-        headers = _login_user(request, userid)
-
-        resp = HTTPSeeOther(redirect_to, headers=dict(headers))
-        return resp
-
-    return {
-        'form': form,
-        'redirect': {
-            'field': REDIRECT_FIELD_NAME,
-            'data': redirect_to
-        }
-    }
+    _login_user(request, userid)
 
 
 @view_config(
