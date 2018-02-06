@@ -34,7 +34,7 @@ def authorize(request):
     query = urlencode({
         'state': state,
         'scopes': OAUTH_SCOPES,
-        'client_id': request.registry.settings['github.oauth_id'],
+        'client_id': request.registry.settings['oauth.client_id'],
         'allow_signup': 'true'
     })
     resp = HTTPSeeOther(

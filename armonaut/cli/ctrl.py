@@ -24,6 +24,12 @@ def ctrl():
 
 @ctrl.command()
 def initdb():
+
+    # We run this command twice as it sometimes takes a
+    # second for the PostgreSQL container to start running.
+    os.system('docker-compose run --rm web psql -h database -d postgres -U postgres -c '
+              '"DROP DATABASE IF EXISTS armonaut"')
+
     os.system('docker-compose run --rm web psql -h database -d postgres -U postgres -c '
               '"DROP DATABASE IF EXISTS armonaut"')
     os.system('docker-compose run --rm web psql -h database -d postgres -U postgres -c '
@@ -73,3 +79,9 @@ def shell():
 @ctrl.command()
 def lint():
     os.system('flake8')
+
+
+@ctrl.command()
+def clean():
+    os.system('docker ps -aq --filter name=armonaut | xargs docker stop')
+    os.system('docker-compose rm --force')

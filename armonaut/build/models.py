@@ -15,7 +15,8 @@
 import enum
 from armonaut.db import Model
 from sqlalchemy import (Column, String, DateTime,
-                        ForeignKey, Enum, SmallInteger)
+                        ForeignKey, Enum,
+                        func)
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSON
 
@@ -52,6 +53,9 @@ class Build(Model):
                     nullable=False,
                     index=True)
 
+    started_at = Column(DateTime, server_default=func.sql.now())
+    finished_at = Column(DateTime, nullable=True, default=None)
+
     commit_id = Column(ForeignKey('commits.id'), nullable=False)
     commit = relationship(
         'Commit',
@@ -74,7 +78,8 @@ class Job(Model):
                     nullable=False,
                     index=True)
 
-    compute_units = Column(SmallInteger, nullable=False)
+    started_at = Column(DateTime, server_default=func.sql.now())
+    finished_at = Column(DateTime, nullable=True, default=None)
     config = Column(JSON(none_as_null=True), nullable=False)
 
     build = relationship(
