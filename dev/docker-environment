@@ -3,13 +3,3 @@ ARMONAUT_SECRET=notasecret
 
 DATABASE_URL=postgresql://postgres@database:5432/armonaut
 REDIS_URL=redis://redis:6379/0
-
-PUSHER_APP_ID=434405
-PUSHER_API_ID=38afe2279a6c91246cd8
-PUSHER_API_SECRET=notasecret
-PUSHER_REGION=us2
-
-MAIL_HOST=smtp
-MAIL_PORT=2525
-MAIL_SENDER=armonaut@armonaut.io
-MAIL_SSL=false

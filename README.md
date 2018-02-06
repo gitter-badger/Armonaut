@@ -46,7 +46,6 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [celery](http://celeryproject.org/) (BSD),
 [celery-redbeat](https://github.com/sibson/redbeat) (Apache-2.0),
 [click](http://github.com/mitsuhiko/click) (BSD),
-[disposable-email-domains](https://github.com/di/disposable-email-domains) (MIT),
 [Docker](https://github.com/moby/moby) (Apache-2.0),
 [first](https://github.com/hynek/first/) (MIT),
 [Gulp](https://github.com/gulpjs/gulp) (MIT),
@@ -60,7 +59,6 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [passlib](https://bitbucket.org/ecollins/passlib) (BSD),
 [PostgreSQL](https://www.postgresql.org/) (BSD-like)
 [psycopg2](http://initd.org/psycopg/) (LGPL),
-[pusher](https://github.com/pusher/pusher-http-python) (MIT),
 [pygments](http://pygments.org/) (BSD),
 [pyramid](https://trypyramid.com/) (ZPL),
 [pyramid-jinja2](https://github.com/Pylons/pyramid_jinja2) (BSD-like),
@@ -76,9 +74,8 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [structlog](http://www.structlog.org/) (Apache-2.0),
 [whitenoise](http://whitenoise.evans.io/) (MIT),
 [wtforms](http://wtforms.simplecodes.com/) (BSD),
-[zope.interface](https://github.com/zopefoundation/zope.interface) (ZPL),
-[zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL), and
-[zxcvbn-python](https://github.com/dwolfhub/zxcvbn-python) (MIT)
+[zope.interface](https://github.com/zopefoundation/zope.interface) (ZPL), and
+[zope.sqlalchemy](http://pypi.python.org/pypi/zope.sqlalchemy) (ZPL)
 
 ## License
 

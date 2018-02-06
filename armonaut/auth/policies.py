@@ -13,26 +13,12 @@
 # limitations under the License.
 
 from pyramid.authentication import (
-    BasicAuthAuthenticationPolicy as _BasicAuthAuthenticationPolicy,
     SessionAuthenticationPolicy as _SessionAuthenticationPolicy
 )
-from armonaut.auth.interfaces import IUserService
 from armonaut.cache.http import add_vary_callback
-
-
-class BasicAuthAuthenticationPolicy(_BasicAuthAuthenticationPolicy):
-    def unauthenticated_userid(self, request):
-        request.add_response_callback(add_vary_callback('Authorization'))
-
-        email = _BasicAuthAuthenticationPolicy.unauthenticated_userid(self, request)
-
-        if email is not None:
-            login_service = request.find_service(IUserService, context=None)
-            return str(login_service.find_userid(email))
 
 
 class SessionAuthenticationPolicy(_SessionAuthenticationPolicy):
     def unauthenticated_userid(self, request):
         request.add_response_callback(add_vary_callback('Cookie'))
-
         return _SessionAuthenticationPolicy.unauthenticated_userid(self, request)

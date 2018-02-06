@@ -9,11 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added Event PubSub support with Pusher.
+- Added Heroku `app.json` file for Heroku Button.
 - Added Object Storage support with DigitalOcean Spaces.
 - Added Projects, Roles, and Accounts.
-- Added GitLab webhook service.
-- Added BitBucket webhook service.
 - Added GitHub webhook service.
 - Added basic login template.
 - Added BasicAuth and Session-based authentication.

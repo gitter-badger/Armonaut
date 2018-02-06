@@ -24,18 +24,6 @@ from armonaut.rate_limit import RateLimit, IRateLimiter
 REDIRECT_FIELD_NAME = 'next'
 
 
-def _login(email, password, request):
-    login_service = request.find_service(IUserService, context=None)
-    userid = login_service.find_userid(email=email)
-    if userid is not None:
-        if login_service.check_password(userid, password):
-            login_service.update_user(
-                userid,
-                last_login=datetime.datetime.utcnow()
-            )
-            return _authenticate(userid, request)
-
-
 def _authenticate(userid, request):
     login_service = request.find_service(IUserService, context=None)
     user = login_service.get_user(userid)
@@ -63,8 +51,7 @@ def includeme(config):
 
     config.set_authentication_policy(
         MultiAuthenticationPolicy([
-            SessionAuthenticationPolicy(callback=_authenticate),
-            BasicAuthAuthenticationPolicy(check=_login)
+            SessionAuthenticationPolicy(callback=_authenticate)
         ])
     )
     config.set_authorization_policy(ACLAuthorizationPolicy())

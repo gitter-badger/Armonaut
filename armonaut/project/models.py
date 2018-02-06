@@ -13,16 +13,10 @@
 # limitations under the License.
 
 import enum
-from sqlalchemy import Column, Enum, String, UniqueConstraint, ForeignKey, Boolean
+from sqlalchemy import Column, BigInteger, Enum, String, UniqueConstraint, ForeignKey, Boolean
 from sqlalchemy.orm import relationship, object_session, lazyload, joinedload
 from pyramid.authorization import Allow, Everyone
 from armonaut.db import Model
-
-
-class ProjectHost(enum.Enum):
-    GITHUB = 'github'
-    GITLAB = 'gitlab'
-    BITBUCKET = 'bitbucket'
 
 
 class RoleType(enum.Enum):
@@ -34,9 +28,9 @@ class Role(Model):
     __tablename__ = 'roles'
 
     role_type = Column(Enum(RoleType), nullable=False)
-    account = relationship('Account', uselist=False, back_populates='roles')
-    account_id = Column(
-        ForeignKey('accounts.id', onupdate='CASCADE', ondelete='CASCADE'),
+    user = relationship('User', uselist=False, back_populates='roles')
+    user_id = Column(
+        ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False
     )
 
@@ -53,7 +47,8 @@ class Project(Model):
 
     active = Column(Boolean, default=False, nullable=False)
 
-    host = Column(Enum(ProjectHost), nullable=False, index=True)
+    github_id = Column(BigInteger, nullable=False, index=True)
+
     name = Column(String(255), nullable=False, index=True)
     owner = Column(String(255), nullable=False, index=True)
 

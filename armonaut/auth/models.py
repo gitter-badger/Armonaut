@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sqlalchemy import Column, String, DateTime, Boolean, Text, ForeignKey
+from sqlalchemy import Column, String, DateTime, BigInteger, Text, Boolean
 from sqlalchemy import sql
 from sqlalchemy.orm import relationship
 from armonaut.db import Model
@@ -21,31 +21,16 @@ from armonaut.db import Model
 class User(Model):
     __tablename__ = 'users'
 
-    email = Column(String(96), nullable=False, index=True, unique=True)
-    password = Column(String(128), nullable=False)
-
-    is_superuser = Column(Boolean, nullable=False)
-    is_staff = Column(Boolean, nullable=False)
-
-    joined_date = Column(DateTime, nullable=False, server_default=sql.func.now())
-    password_date = Column(DateTime, nullable=False, server_default=sql.func.now())
-    last_login = Column(DateTime, nullable=False, server_default=sql.func.now())
-
-    accounts = relationship('Account', back_populates='user')
-
-
-class Account(Model):
-    __tablename__ = 'accounts'
-
+    github_id = Column(BigInteger, nullable=False, index=True)
     username = Column(String(255), nullable=False, index=True)
     display_name = Column(Text, nullable=False)
     avatar_url = Column(Text, nullable=False)
 
     access_token = Column(Text, nullable=False)
-    refresh_token = Column(Text, nullable=False)
 
-    user = relationship('User', back_populates='accounts', uselist=False)
-    user_id = Column(
-        ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'),
-        nullable=False
-    )
+    is_superuser = Column(Boolean, nullable=False)
+
+    joined_date = Column(DateTime, nullable=False, server_default=sql.func.now())
+    last_login = Column(DateTime, nullable=False, server_default=sql.func.now())
+
+    roles = relationship('Roles', back_populates='user')

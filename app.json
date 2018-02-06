@@ -1,0 +1,46 @@
+{
+  "name": "Armonaut",
+  "description": "One-Click to Deploy Continuous Integration and Delivery",
+  "logo": "",
+  "keywords": [
+    "armonaut",
+    "continuous-integration",
+    "continuous-delivery",
+    "github"
+  ],
+  "website": "https://armonaut.io",
+  "repository": "https://github.com/SethMichaelLarson/Armonaut",
+  "success_url": "/",
+  "env": {
+    "ARMONAUT_SECRET": {
+      "description": "Secret token for signing session cookies.",
+      "generator": "secret"
+    },
+    "ARMONAUT_GITHUB_SUPERUSER": {
+      "description": "GitHub username of the superuser for this application."
+    }
+  },
+  "image": "heroku/python",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev",
+      "options": {
+        "version": "10.1"
+      }
+    },
+    {
+      "plan": "heroku-redis:hobby-dev",
+      "options": {}
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    },
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
