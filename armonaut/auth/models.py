@@ -32,4 +32,4 @@ class User(Model):
     joined_date = Column(DateTime, nullable=False, server_default=sql.func.now())
     last_login = Column(DateTime, nullable=False, server_default=sql.func.now())
 
-    roles = relationship('Roles', back_populates='user')
+    roles = relationship('ProjectRole', back_populates='user')

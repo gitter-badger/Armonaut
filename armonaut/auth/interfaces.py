@@ -15,7 +15,7 @@
 from zope.interface import Interface
 
 
-class IOAuthStateService(Interface):
+class IOAuthService(Interface):
     def create_state():
         """
         Creates a state token with a timeout
@@ -24,6 +24,11 @@ class IOAuthStateService(Interface):
     def check_state(state):
         """
         Checks a state token to see if it's valid
+        """
+
+    def exchange_code_for_access_token(request, state, code):
+        """
+        Exchanges a code and state for an access token
         """
 
 
@@ -42,4 +47,9 @@ class IUserService(Interface):
     def update_user(user_id, **changes):
         """
         Updates the user object
+        """
+
+    def get_user_from_access_token(request, access_token):
+        """
+        Gets a user from an access token from OAuth flow
         """

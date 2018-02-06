@@ -17,7 +17,7 @@ import functools
 from sqlalchemy.orm.exc import NoResultFound
 from zope.interface import implementer
 from armonaut.auth.interfaces import (
-    IUserService, IOAuthStateService
+    IUserService, IOAuthService
 )
 from armonaut.auth.models import User
 from armonaut.utils import crypto
@@ -44,13 +44,6 @@ class DatabaseUserService:
             return None
         return user.id
 
-    def create_user(self, username, display_name, access_token):
-        user = User()
-        user.username = username
-        user.display_name = display_name
-        user.access_token = access_token
-        user.avatar_url = avatar_url
-
     def update_user(self, user_id, **changes):
         user = self.get_user(user_id)
         if user is None:
@@ -59,17 +52,46 @@ class DatabaseUserService:
             setattr(user, name, value)
         return user
 
+    def get_user_from_access_token(self, request, access_token):
+        with request.http.get('https://api.github.com/user',
+                              headers={'Authorization': f'token {access_token}'}) as r:
+            if not r.ok:
+                return None
+            user_json = r.json()
+            try:
+                user = (
+                    self.db.query(User.id)
+                        .filter(User.github_id == user_json['id'])
+                        .one()
+                )
 
-@implementer(IOAuthStateService)
-class RedisOAuthStateService:
-    max_age = 5 * 60  # 5 minute expire time on state tokens.
+            # No user found but we have a valid access token
+            # so we should create a new user.
+            except NoResultFound:
+                user = User()
+                user.github_id = user_json['id']
 
-    def __init__(self, url):
+            # Otherwise take the oppurtunity to update to latest information.
+            user.username = user_json['login']
+            user.avatar_url = user_json['avatar_url']
+            user.display_name = user_json['name']
+            user.access_token = access_token
+
+            return user
+
+
+@implementer(IOAuthService)
+class RedisOAuthService:
+    max_state_age = 5 * 60  # 5 minute expire time on state tokens.
+
+    def __init__(self, url, client_id, client_secret):
         self.redis = redis.StrictRedis.from_url(url)
+        self._client_id = client_id
+        self._client_secret = client_secret
 
     def create_state(self):
         state = crypto.random_token()
-        self.redis.setex(self._redis_key(state), self.max_age, 1)
+        self.redis.setex(self._redis_key(state), self.max_state_age, 1)
         return state
 
     def check_state(self, state):
@@ -79,6 +101,19 @@ class RedisOAuthStateService:
             return False
         self.redis.delete(key)
         return True
+
+    def exchange_code_for_access_token(self, request, state, code):
+        with request.http.post('https://api.github.com/oauth/access_token',
+                               params={'client_id': self._client_id,
+                                       'client_secret': self._client_secret,
+                                       'code': code,
+                                       'state': state}) as r:
+            if not r.ok:
+                return None
+            try:
+                return r.json()['access_token']
+            except KeyError:
+                return None
 
     @staticmethod
     def _redis_key(state):
@@ -91,7 +126,9 @@ def database_login_factory(context, request):
     )
 
 
-def oauth_state_factory(context, request):
-    return RedisOAuthStateService(
-        request.registry.settings['oauth.url']
+def oauth_factory(context, request):
+    return RedisOAuthService(
+        request.registry.settings['oauth.state_storage_url'],
+        request.registry.settings['oauth.client_id'],
+        request.registry.settings['oauth.client_secret']
     )

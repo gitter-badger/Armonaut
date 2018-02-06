@@ -60,6 +60,7 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [passlib](https://bitbucket.org/ecollins/passlib) (BSD),
 [PostgreSQL](https://www.postgresql.org/) (BSD-like)
 [psycopg2](http://initd.org/psycopg/) (LGPL),
+[pusher](https://pusher.com) (MIT),
 [pygments](http://pygments.org/) (BSD),
 [pyramid](https://trypyramid.com/) (ZPL),
 [pyramid-jinja2](https://github.com/Pylons/pyramid_jinja2) (BSD-like),

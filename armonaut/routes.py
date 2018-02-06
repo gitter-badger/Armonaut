@@ -18,6 +18,7 @@ def includeme(config):
 
     config.add_route('index', '/')
 
-    config.add_route('auth.login', '/auth/login', domain=armonaut)
+    config.add_route('auth.authorize', '/auth/authorize', domain=armonaut)
+    config.add_route('auth.callback', '/auth/callback', domain=armonaut)
     config.add_route('auth.logout', '/auth/logout', domain=armonaut)
     config.add_route('auth.pusher', '/auth/pusher', domain=armonaut)

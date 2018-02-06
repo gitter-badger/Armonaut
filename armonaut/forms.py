@@ -13,32 +13,7 @@
 # limitations under the License.
 
 from wtforms import Form as _Form
-from wtforms.validators import StopValidation, ValidationError
-from zxcvbn import zxcvbn
-
-
-class PasswordStrengthValidator:
-    def __init__(self, *, user_input_fields=None, required_strength=2):
-        self.user_input_fields = user_input_fields
-        self.required_strength = required_strength
-
-    def __call__(self, form, field):
-        user_inputs = []
-        for fieldname in self.user_input_fields:
-            try:
-                user_inputs.append(form[fieldname].data)
-            except KeyError:
-                raise ValidationError(f'Invalid field name: {fieldname!r}')
-
-        results = zxcvbn(field.data, user_inputs=user_inputs)
-
-        if results['score'] < self.required_strength:
-            message = (results['feedback']['warning']
-                       if results['feedback']['warning']
-                       else 'Password is too easily guessed.')
-            if results['feedback']['suggestions']:
-                message += ' ' + ', '.join(results['feedback']['suggestions'])
-            raise ValidationError(message)
+from wtforms.validators import StopValidation
 
 
 class Form(_Form):

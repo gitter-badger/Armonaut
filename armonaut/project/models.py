@@ -19,15 +19,15 @@ from pyramid.authorization import Allow, Everyone
 from armonaut.db import Model
 
 
-class RoleType(enum.Enum):
+class ProjectRoleType(enum.Enum):
     OWNER = 'owner'  # read, commit, admin
     COLLABORATOR = 'collaborator'  # read, commit
 
 
-class Role(Model):
-    __tablename__ = 'roles'
+class ProjectRole(Model):
+    __tablename__ = 'project_roles'
 
-    role_type = Column(Enum(RoleType), nullable=False)
+    role_type = Column(Enum(ProjectRoleType), nullable=False)
     user = relationship('User', uselist=False, back_populates='roles')
     user_id = Column(
         ForeignKey('users.id', onupdate='CASCADE', ondelete='CASCADE'),
@@ -43,7 +43,7 @@ class Role(Model):
 
 class Project(Model):
     __tablename__ = 'projects'
-    __table_args__ = (UniqueConstraint('host', 'name', 'owner', name='uix_slug'),)
+    __table_args__ = (UniqueConstraint('name', 'owner', name='uix_slug'),)
 
     active = Column(Boolean, default=False, nullable=False)
 
@@ -58,7 +58,7 @@ class Project(Model):
     webhook_secret = Column(String(255))
 
     builds = relationship('Build', back_populates='project')
-    roles = relationship('Role', back_populates='project')
+    roles = relationship('ProjectRole', back_populates='project')
 
     @property
     def slug(self):
@@ -68,14 +68,17 @@ class Project(Model):
         session = object_session(self)
         acls = [(Allow, 'group:admins', ['admin'])]
 
-        query = session.query(Role).filter(Role.project == self)
+        query = session.query(ProjectRole).filter(ProjectRole.project == self)
         query = query.options(lazyload('project'))
         query = query.options(joinedload('account').joinedload('account.user_id'))
 
-        for role in sorted(query.all(), key=lambda x: [RoleType.OWNER, RoleType.COLLABORATOR].index(x)):
-            if role.role_type == RoleType.OWNER:
+        for role in sorted(
+                query.all(),
+                key=lambda x: [ProjectRoleType.OWNER, ProjectRoleType.COLLABORATOR].index(x)
+        ):
+            if role.role_type == ProjectRoleType.OWNER:
                 acls.append((Allow, str(role.account.user_id), ['project:manage', 'project:read']))
-            elif role.role_type == RoleType.COLLABORATOR:
+            elif role.role_type == ProjectRoleType.COLLABORATOR:
                 acls.append((Allow, str(role.account.user_id), ['project:read']))
 
         if self.public:

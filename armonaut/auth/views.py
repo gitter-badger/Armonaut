@@ -18,7 +18,7 @@ from pyramid.httpexceptions import HTTPSeeOther, HTTPBadRequest
 from pyramid.security import remember, forget
 from pyramid.view import view_config
 from armonaut.auth import REDIRECT_FIELD_NAME, OAUTH_SCOPES
-from armonaut.auth.interfaces import IUserService, IOAuthStateService
+from armonaut.auth.interfaces import IUserService, IOAuthService
 from armonaut.utils.http import is_safe_url
 
 
@@ -29,7 +29,7 @@ from armonaut.utils.http import is_safe_url
     require_methods=['GET']
 )
 def authorize(request):
-    state_service = request.find_service(IOAuthStateService, context=None)
+    state_service = request.find_service(IOAuthService, context=None)
     state = state_service.create_state()
     query = urlencode({
         'state': state,
@@ -56,14 +56,19 @@ def callback(request):
     if code is None or state is None:
         return HTTPBadRequest('Invalid OAuth callback')
 
-    state_service = request.find_service(IOAuthStateService, context=None)
+    state_service = request.find_service(IOAuthService, context=None)
     if not state_service.check_state(state):
         return HTTPBadRequest('Expired OAuth state token. Try authorizing again.')
 
-    user_service = request.find_service(IUserService, context=None)
-    user_service.
+    access_token = state_service.exchange_code_for_access_token(code, state)
+    if access_token is None:
+        return HTTPBadRequest('GitHub did not return an access token. Try authorizing again.')
 
-    _login_user(request, userid)
+    user_service = request.find_service(IUserService, context=None)
+    user = user_service.get_user_from_access_token(access_token)
+    headers = _login_user(request, user)
+
+    return HTTPSeeOther('/', headers=headers)
 
 
 @view_config(
@@ -98,12 +103,12 @@ def logout(request, redirect_field_name=REDIRECT_FIELD_NAME):
     }
 
 
-def _login_user(request, userid):
+def _login_user(request, user):
 
     # To protect against session fixation attacks we must force
     # invalidate the current session.
     if (request.unauthenticated_userid is not None and
-            request.unauthenticated_userid != userid):
+            request.unauthenticated_userid != user.id):
         request.session.invalidate()
     else:
         data = dict(request.session.items())
@@ -111,7 +116,7 @@ def _login_user(request, userid):
         request.session.update(data)
 
     # Remember the userid using the authentication policy
-    headers = remember(request, str(userid))
+    headers = remember(request, str(user.id))
 
     # Cycle the CSRF token since we've crossed an authentication
     # boundary and we don't want to continue using the old one.
@@ -120,6 +125,6 @@ def _login_user(request, userid):
     # Whenever we log in the user we want to update their user so
     # that it records when the last login was.
     user_service = request.find_service(IUserService, context=None)
-    user_service.update_user(userid, last_login=datetime.datetime.utcnow())
+    user_service.update_user(user.id, last_login=datetime.datetime.utcnow())
 
     return headers

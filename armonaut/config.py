@@ -80,7 +80,9 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'sessions.url', 'REDIS_URL')
     maybe_set(settings, 'sessions.secret', 'ARMONAUT_SECRET')
 
-    maybe_set(settings, 'oauth.url', 'REDIS_URL')
+    maybe_set(settings, 'oauth.state_storage_url', 'REDIS_URL')
+    maybe_set(settings, 'oauth.client_id', 'GITHUB_OAUTH_ID')
+    maybe_set(settings, 'oauth.client_secret', 'GITHUB_OAUTH_SECRET')
 
     maybe_set(settings, 'logging.level', 'LOGGING_LEVEL')
 
@@ -95,9 +97,6 @@ def configure(settings=None) -> Configurator:
     maybe_set(settings, 'pusher.api_id', 'PUSHER_API_ID')
     maybe_set(settings, 'pusher.api_secret', 'PUSHER_API_SECRET')
     maybe_set(settings, 'pusher.region', 'PUSHER_REGION')
-
-    maybe_set(settings, 'github.oauth_id', 'GITHUB_OAUTH_ID')
-    maybe_set(settings, 'github.oauth_secret', 'GITHUB_OAUTH_SECRET')
 
     maybe_set(settings, 'mail.host', 'MAIL_HOST')
     maybe_set(settings, 'mail.port', 'MAIL_PORT')
@@ -198,6 +197,14 @@ def configure(settings=None) -> Configurator:
 
     # Register Event PubSub
     config.include('.events')
+
+    # Include TLS certificate verification info for requests
+    config.add_settings({
+        'http': {
+            'verify': '/etc/ssl/certs'
+        }
+    })
+    config.include('.http')
 
     # Enable compression of our HTTP responses
     config.add_tween(
