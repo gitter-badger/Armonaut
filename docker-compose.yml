@@ -30,11 +30,3 @@ services:
     links:
       - database
       - redis
-      - smtp
-
-  smtp:
-    build:
-      context: .
-    command: python3 /opt/armonaut/dev/smtp.py 0.0.0.0:2525
-    ports:
-      - '2525:2525'

@@ -35,7 +35,8 @@ def authorize(request):
         'state': state,
         'scopes': OAUTH_SCOPES,
         'client_id': request.registry.settings['oauth.client_id'],
-        'allow_signup': 'true'
+        'allow_signup': 'true',
+        'redirect_uri': request.route_url('auth.callback')
     })
     resp = HTTPSeeOther(
         f'https://github.com/login/oauth/authorize?{query}'
@@ -60,12 +61,12 @@ def callback(request):
     if not state_service.check_state(state):
         return HTTPBadRequest('Expired OAuth state token. Try authorizing again.')
 
-    access_token = state_service.exchange_code_for_access_token(code, state)
+    access_token = state_service.exchange_code_for_access_token(request, code, state)
     if access_token is None:
         return HTTPBadRequest('GitHub did not return an access token. Try authorizing again.')
 
     user_service = request.find_service(IUserService, context=None)
-    user = user_service.get_user_from_access_token(access_token)
+    user = user_service.get_user_from_access_token(request, access_token)
     headers = _login_user(request, user)
 
     return HTTPSeeOther('/', headers=headers)

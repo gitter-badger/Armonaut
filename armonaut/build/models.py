@@ -15,10 +15,10 @@
 import enum
 from armonaut.db import Model
 from sqlalchemy import (Column, String, DateTime,
-                        ForeignKey, Enum,
-                        func)
+                        ForeignKey, Enum, BigInteger)
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy import sql
 
 
 class Status(enum.Enum):
@@ -35,11 +35,9 @@ class Commit(Model):
     hexsha = Column(String, nullable=False, index=True)
     ref = Column(String, nullable=False)
 
-    author_remote_id = Column(String, default=None)
+    author_github_id = Column(BigInteger, default=None)
     author_name = Column(String, nullable=False)
     author_email = Column(String, nullable=False)
-    author_committed_at = Column(DateTime, nullable=False, index=True)
-
     message = Column(String(256), nullable=False)
 
     build = relationship('Build', back_populates='commit', uselist=False)
@@ -53,15 +51,18 @@ class Build(Model):
                     nullable=False,
                     index=True)
 
-    started_at = Column(DateTime, server_default=func.sql.now())
+    started_at = Column(DateTime, nullable=False, server_default=sql.func.now())
     finished_at = Column(DateTime, nullable=True, default=None)
 
+    project = relationship('Project', back_populates='builds')
+    project_id = Column(ForeignKey('projects.id'), nullable=False)
     commit_id = Column(ForeignKey('commits.id'), nullable=False)
     commit = relationship(
         'Commit',
         back_populates='build',
         uselist=False,
-        cascade='all, delete-orphan'
+        cascade='all, delete-orphan',
+        single_parent=True
     )
     jobs = relationship(
         'Job',
@@ -78,7 +79,7 @@ class Job(Model):
                     nullable=False,
                     index=True)
 
-    started_at = Column(DateTime, server_default=func.sql.now())
+    started_at = Column(DateTime, server_default=sql.func.now())
     finished_at = Column(DateTime, nullable=True, default=None)
     config = Column(JSON(none_as_null=True), nullable=False)
 
@@ -86,3 +87,4 @@ class Job(Model):
         'Build',
         back_populates='jobs'
     )
+    build_id = Column(ForeignKey('builds.id'), nullable=False)

@@ -24,6 +24,8 @@ def ctrl():
 
 @ctrl.command()
 def initdb():
+    # Remove all containers so we get a fresh slate.
+    os.system('docker-compose build')
 
     # We run this command twice as it sometimes takes a
     # second for the PostgreSQL container to start running.

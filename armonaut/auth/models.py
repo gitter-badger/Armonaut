@@ -27,7 +27,7 @@ class User(Model):
     avatar_url = Column(Text, nullable=False)
     access_token = Column(Text, nullable=False)
 
-    is_superuser = Column(Boolean, nullable=False)
+    is_superuser = Column(Boolean, nullable=False, server_default=sql.False_())
 
     joined_date = Column(DateTime, nullable=False, server_default=sql.func.now())
     last_login = Column(DateTime, nullable=False, server_default=sql.func.now())

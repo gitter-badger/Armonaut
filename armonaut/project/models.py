@@ -22,6 +22,7 @@ from armonaut.db import Model
 class ProjectRoleType(enum.Enum):
     OWNER = 'owner'  # read, commit, admin
     COLLABORATOR = 'collaborator'  # read, commit
+    READ_ONLY = 'read_only'
 
 
 class ProjectRole(Model):

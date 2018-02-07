@@ -71,11 +71,14 @@ class DatabaseUserService:
                 user = User()
                 user.github_id = user_json['id']
 
-            # Otherwise take the oppurtunity to update to latest information.
+            # Otherwise take the opportunity to update to latest information.
             user.username = user_json['login']
             user.avatar_url = user_json['avatar_url']
             user.display_name = user_json['name']
             user.access_token = access_token
+
+            request.db.add(user)
+            request.db.flush()
 
             return user
 
@@ -102,12 +105,13 @@ class RedisOAuthService:
         self.redis.delete(key)
         return True
 
-    def exchange_code_for_access_token(self, request, state, code):
-        with request.http.post('https://api.github.com/oauth/access_token',
+    def exchange_code_for_access_token(self, request, code, state):
+        with request.http.post('https://github.com/login/oauth/access_token',
                                params={'client_id': self._client_id,
                                        'client_secret': self._client_secret,
                                        'code': code,
-                                       'state': state}) as r:
+                                       'state': state,
+                                       'redirect_uri': request.route_url('auth.callback')}) as r:
             if not r.ok:
                 return None
             try:
