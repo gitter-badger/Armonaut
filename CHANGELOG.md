@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added Pusher private channel authentication.
 - Added GitHub OAuth service.
 - Added Object Storage support with DigitalOcean Spaces.
 - Added Projects, Roles, and Accounts.
