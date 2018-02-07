@@ -12,21 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from zope.interface import Interface
+from zope.interface.verify import verifyClass
+from armonaut.rate_limit.interfaces import IRateLimiter
+from armonaut.rate_limit import RateLimiter, DummyRateLimiter
 
 
-class IRateLimiter(Interface):
-    def hit(self, *identifiers):
-        """
-        Adds one to each identifier.
-        """
+def test_ratelimiter_implements_iratelimiter():
+    assert verifyClass(IRateLimiter, RateLimiter)
 
-    def test(self, *identifiers):
-        """
-        Tests if a limit has been hit.
-        """
 
-    def resets_in(self, *identifiers):
-        """
-        Returns the number of seconds until the rate limit resets.
-        """
+def test_dummy_ratelimiter_implements_iratelimiter():
+    assert verifyClass(IRateLimiter, DummyRateLimiter)

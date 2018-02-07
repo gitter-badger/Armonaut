@@ -11,22 +11,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from zope.interface import Interface
-
-
-class IRateLimiter(Interface):
-    def hit(self, *identifiers):
-        """
-        Adds one to each identifier.
-        """
-
-    def test(self, *identifiers):
-        """
-        Tests if a limit has been hit.
-        """
-
-    def resets_in(self, *identifiers):
-        """
-        Returns the number of seconds until the rate limit resets.
-        """
