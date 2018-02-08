@@ -21,4 +21,11 @@ def includeme(config):
     config.add_route('auth.authorize', '/auth/authorize', domain=armonaut)
     config.add_route('auth.callback', '/auth/callback', domain=armonaut)
     config.add_route('auth.logout', '/auth/logout', domain=armonaut)
-    config.add_route('auth.pusher', '/auth/pusher', domain=armonaut)
+
+    config.add_route(
+        'auth.pusher',
+        '/auth/pusher/{owner}/{name}',
+        traverse='/{owner}/{name}',
+        factory='armonaut.project.models:ProjectFactory',
+        domain=armonaut
+    )

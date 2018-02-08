@@ -18,6 +18,7 @@ import typing
 import transaction
 from pyramid.config import Configurator as _Configurator
 from pyramid.tweens import EXCVIEW
+from pyramid.security import Allow
 
 
 class Environment(enum.Enum):
@@ -35,6 +36,18 @@ class Configurator(_Configurator):
         for middleware, args, kw in self.get_settings()['wsgi.middlewares']:
             app = middleware(app, *args, **kw)
         return app
+
+
+class RootFactory(object):
+    __parent__ = None
+    __name__ = None
+
+    __acl__ = [
+        (Allow, 'group:admins', 'admin')
+    ]
+
+    def __init__(self, request):
+        pass
 
 
 def maybe_set(settings: typing.Dict[str, typing.Any],
@@ -132,6 +145,7 @@ def configure(settings=None) -> Configurator:
 
     # Create a configuration from the settings
     config = Configurator(settings=settings)
+    config.set_root_factory(RootFactory)
 
     # Include SRF support immediate after the Configurator instance
     # to ensure our defaults get set ASAP so no moficiatins before commit()

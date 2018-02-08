@@ -21,6 +21,7 @@ from armonaut.auth.interfaces import (
 )
 from armonaut.auth.models import User
 from armonaut.utils import crypto
+from armonaut.project.tasks import synchronize_user
 
 
 @implementer(IUserService)
@@ -58,6 +59,7 @@ class DatabaseUserService:
             if not r.ok:
                 return None
             user_json = r.json()
+            new_user = False
             try:
                 user = (
                     self.db.query(User.id)
@@ -68,6 +70,7 @@ class DatabaseUserService:
             # No user found but we have a valid access token
             # so we should create a new user.
             except NoResultFound:
+                new_user = True
                 user = User()
                 user.github_id = user_json['id']
 
@@ -79,6 +82,10 @@ class DatabaseUserService:
 
             request.db.add(user)
             request.db.flush()
+
+            # Synchronize the user's projects if they are brand new.
+            if new_user:
+                synchronize_user.delay(user)
 
             return user
 

@@ -14,14 +14,16 @@
 
 import enum
 from sqlalchemy import Column, BigInteger, Enum, String, UniqueConstraint, ForeignKey, Boolean
-from sqlalchemy.orm import relationship, object_session, lazyload, joinedload
+from sqlalchemy.orm import relationship, object_session, lazyload
+from sqlalchemy.orm.exc import NoResultFound
 from pyramid.authorization import Allow, Everyone
+from pyramid.security import DENY_ALL
 from armonaut.db import Model
 
 
 class ProjectRoleType(enum.Enum):
-    OWNER = 'owner'  # read, commit, admin
-    COLLABORATOR = 'collaborator'  # read, commit
+    OWNER = 'owner'  # read, manage, admin
+    COLLABORATOR = 'collaborator'  # read, manage
     READ_ONLY = 'read_only'  # read
 
 
@@ -63,7 +65,7 @@ class Project(Model):
 
     @property
     def slug(self):
-        return f'{str(self.host)}/{self.owner}/{self.name}'
+        return f'{self.owner}/{self.name}'
 
     def __acl__(self):
         session = object_session(self)
@@ -71,18 +73,58 @@ class Project(Model):
 
         query = session.query(ProjectRole).filter(ProjectRole.project == self)
         query = query.options(lazyload('project'))
-        query = query.options(joinedload('account').joinedload('account.user_id'))
+        query = query.options(lazyload('user'))
 
-        for role in sorted(
-                query.all(),
-                key=lambda x: [ProjectRoleType.OWNER, ProjectRoleType.COLLABORATOR].index(x)
-        ):
+        def sorted_key(item):
+            return [
+                ProjectRoleType.OWNER,
+                ProjectRoleType.COLLABORATOR,
+                ProjectRoleType.READ_ONLY
+            ].index(item)
+
+        for role in sorted(query.all(), key=sorted_key):
             if role.role_type == ProjectRoleType.OWNER:
-                acls.append((Allow, str(role.account.user_id), ['project:manage', 'project:read']))
+                acls.append((Allow, str(role.account.user_id), ['project:admin', 'project:manage', 'project:read']))
             elif role.role_type == ProjectRoleType.COLLABORATOR:
-                acls.append((Allow, str(role.account.user_id), ['project:read']))
+                acls.append((Allow, str(role.account.user_id), ['project:manage', 'project:read']))
+            elif role.role_type == ProjectRoleType.READ_ONLY:
+                acls.append((Allow, str(role.user_id), ['project:read']))
 
         if self.public:
             acls.append((Allow, Everyone, ['project:read']))
 
         return acls
+
+
+class ProjectFactory(object):
+    """Factory object for Pyramid view traversal
+    in order to determine the ACLs that a user
+    has over a given project. This factory must
+    be traversed twice (owner then name) before
+    returning an object with ACLs.
+    """
+    def __init__(self, request):
+        self.request = request
+        self.owner = None
+
+    def __getitem__(self, item):
+        if self.owner is None:
+            self.owner = item
+            return self
+        else:
+            try:
+                project = (
+                    self.request.db.query(Project)
+                    .filter(Project.owner == self.owner)
+                    .filter(Project.name == item)
+                    .one()
+                )
+                return project
+            except NoResultFound:
+                raise KeyError from None
+
+    def __acl__(self):
+        """We deny all here because we want to do a full traversal
+        from owner to name not to stick in the middle.
+        """
+        return [DENY_ALL]
