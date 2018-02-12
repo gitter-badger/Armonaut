@@ -331,6 +331,22 @@ python -m armonaut ctrl lint
       return x + y
   ```
 
+## Submitting Pull Requests
+
+- Always follow the template for Pull Requests and issues to help save time analyzing and reviewing.
+  Pull Requests or issues that don't follow the template will be closed and the author directed to this guide.
+- Small one-off changes like spelling, grammar, docstrings, etc do not require an issue to be made.
+- Before considering submitting a Pull Request, open and issue to start a discussion
+  so other community members can chime in about the problem you'd like to fix or
+  enhancement you'd like to make.
+- Pull Request title should be a short description of the changes being made.
+- Within the Pull Request body should have the phrase `Closes #123` where `123`
+  is the issue that has been created for the changes within the Pull Request.
+- Commit early and often! Your Pull Request will be squashed into one commit when merged.
+- When Squashing commits make sure to include a short description of the changes in the Pull Request
+  as well as a listing of all individual changes in the long message. Include the Pull Request number
+  (eg: `This is a summary of changes (#123)` in the commit summary.
+
 ## Additional Documentation
 
 - [Pyramid](https://trypyramid.com/)
