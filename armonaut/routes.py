@@ -29,3 +29,11 @@ def includeme(config):
         factory='armonaut.project.models:ProjectFactory',
         domain=armonaut
     )
+
+    config.add_route(
+        'builds.get_build',
+        '/gh/{owner}/{name}/builds/{number}',
+        traverse='/{owner}/{name}',
+        factory='armonaut.project.models:ProjectFactory',
+        domain=armonaut
+    )

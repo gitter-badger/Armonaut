@@ -32,3 +32,4 @@ houdini.py
 pygments
 brotlipy
 pusher
+pyyaml

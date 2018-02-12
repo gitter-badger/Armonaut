@@ -12,13 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from armonaut import tasks
+from pyramid.view import view_config
 
 
-@tasks.task(ignore_result=True, acks_late=True)
-def send_event(request, channels, event, data):
-    request.pusher.trigger(
-        channels=channels,
-        event_name=event,
-        data=data
-    )
+@view_config(
+    route_name='builds.get_build',
+    uses_session=True,
+    require_csrf=True,
+    require_methods='GET',
+    permission='project:read'
+)
+def get_build(owner, name, number):
+    raise NotImplementedError()

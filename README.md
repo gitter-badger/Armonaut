@@ -77,6 +77,7 @@ which is [licensed under Apache-2.0](https://github.com/pypa/warehouse/blob/mast
 [pytest-cov](https://github.com/pytest-dev/pytest-cov) (MIT),
 [pytest-needle](https://github.com/jlane9/pytest-needle) (MIT),
 [pytest-postgresql](https://github.com/ClearcodeHQ/pytest-postgresql) (LGPL),
+[pyyaml](http://pyyaml.org/wiki/PyYAML) (MIT),
 [raven](https://github.com/getsentry/raven-python) (BSD),
 [redis-py](http://github.com/andymccurdy/redis-py) (MIT),
 [sqlalchemy](http://sqlalchemy.org/) (MIT),

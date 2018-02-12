@@ -13,12 +13,18 @@
 # limitations under the License.
 
 import enum
+import requests
 from armonaut.db import Model
+from armonaut.http import USER_AGENT
 from sqlalchemy import (Column, String, DateTime,
-                        ForeignKey, Enum, BigInteger)
+                        ForeignKey, Enum, BigInteger, Integer,
+                        UniqueConstraint)
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy import sql
+
+
+COMMIT_STATUS_CONTEXT = 'continuous-integration/armonaut'
 
 
 class Status(enum.Enum):
@@ -42,10 +48,45 @@ class Commit(Model):
 
     build = relationship('Build', back_populates='commit', uselist=False)
 
+    def set_commit_status(self, request, access_token, state, description):
+        """Sets the commit status of a GitHub commit. Always set the
+        URL of the commit status to the URL of the specific build.
+
+        :param request: Pyramid request object.
+        :param access_token:
+            Access token to use to set the status. This function requires it as
+            most times when using this we'll have one on hand.
+        :param state:
+            GitHub state for the commit. One of 'success', 'error',
+            'failure', or 'pending'.
+        :param description: Short description of the status.
+        """
+        build_url = request.route_url(
+            'builds.get_build',
+            self.build.project.owner,
+            self.build.project.name,
+            self.build.number
+        )
+        requests.post(
+            f'https://api.github.com/{self.build.project.slug}/statuses/{self.hexsha}',
+            headers={
+                'Authorization': f'token {access_token}',
+                'User-Agent': USER_AGENT
+            },
+            json={
+                'state': state,
+                'description': description,
+                'target_url': build_url,
+                'context': COMMIT_STATUS_CONTEXT
+            }
+        )
+
 
 class Build(Model):
     __tablename__ = 'builds'
+    __tableargs__ = (UniqueConstraint('project_id', 'number', name='uix_build_number'),)
 
+    number = Column(Integer, nullable=False)
     status = Column(Enum(Status),
                     default=Status.pending,
                     nullable=False,
