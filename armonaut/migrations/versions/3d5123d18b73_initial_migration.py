@@ -45,7 +45,7 @@ def upgrade():
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('owner', sa.String(length=255), nullable=False),
     sa.Column('public', sa.Boolean(), nullable=False),
-    sa.Column('webhook_id', sa.String(), nullable=True),
+    sa.Column('webhook_id', sa.BigInteger(), nullable=True),
     sa.Column('webhook_secret', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name', 'owner', name='uix_slug')

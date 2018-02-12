@@ -33,7 +33,9 @@ sudo apt-get install -y git \
                         curl \
                         software-properties-common \
                         python3-venv \
-                        python3-pip
+                        python3-pip \
+                        python3-dev \
+                        libffi-dev
 ```
 
 ### Installing Docker Community Edition
@@ -244,7 +246,7 @@ of the system instead of the system as a whole.
 Unit tests are run and must pass for each commit that is submitted to GitHub.
 
 ```bash
-python -m armonaut ctrl test tests/unit
+python -m armonaut ctrl test tests/unit/
 ```
 
 #### Running Integration Tests
@@ -291,7 +293,7 @@ See additional [documentation about the toolbar](https://docs.pylonsproject.org/
 ### Linting your Code with Flake8
 
 Armonaut uses [flake8](http://flake8.pycqa.org/en/latest/) as a code linting tool
-in order to catch defects and to keep code maintainabily high. Our only modification
+in order to catch defects and to keep code maintainability high. Our only modification
 to flake8's default configuration is increasing maximum line length to 99 characters
 instead of 79 due to modern IDEs and screen sizes.
 
@@ -305,7 +307,7 @@ python -m armonaut ctrl lint
 
 - In general follow [PEP8](https://www.python.org/dev/peps/pep-0008/#module-level-dunder-names).
 - Use single quotes (`'`) for single-line strings.
-- Use triple-double quotes (`"""`) for doc-strings.
+- Use triple-double quotes (`"""`) for docstrings.
 - Docstrings should have no spaces after triple-double quotes
   and should end with the closing triple-double quotes on their own line.
   ```python

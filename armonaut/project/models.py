@@ -48,16 +48,15 @@ class Project(Model):
     __tablename__ = 'projects'
     __table_args__ = (UniqueConstraint('name', 'owner', name='uix_slug'),)
 
-    active = Column(Boolean, default=False, nullable=False)
-
     github_id = Column(BigInteger, nullable=False, index=True)
 
     name = Column(String(255), nullable=False, index=True)
     owner = Column(String(255), nullable=False, index=True)
 
     public = Column(Boolean, nullable=False)
+    active = Column(Boolean, nullable=False)
 
-    webhook_id = Column(String)
+    webhook_id = Column(BigInteger)
     webhook_secret = Column(String(255))
 
     builds = relationship('Build', back_populates='project')
@@ -75,20 +74,27 @@ class Project(Model):
         query = query.options(lazyload('project'))
         query = query.options(lazyload('user'))
 
-        def sorted_key(item):
+        def sorted_key(role):
             return [
                 ProjectRoleType.OWNER,
                 ProjectRoleType.COLLABORATOR,
                 ProjectRoleType.READ_ONLY
-            ].index(item)
+            ].index(role.role_type)
 
         for role in sorted(query.all(), key=sorted_key):
             if role.role_type == ProjectRoleType.OWNER:
-                acls.append((Allow, str(role.account.user_id), ['project:admin', 'project:manage', 'project:read']))
+                acls.append((
+                    Allow, str(role.user_id),
+                    ['project:admin', 'project:manage', 'project:read'])
+                )
             elif role.role_type == ProjectRoleType.COLLABORATOR:
-                acls.append((Allow, str(role.account.user_id), ['project:manage', 'project:read']))
+                acls.append((
+                    Allow, str(role.user_id), ['project:manage', 'project:read']
+                ))
             elif role.role_type == ProjectRoleType.READ_ONLY:
-                acls.append((Allow, str(role.user_id), ['project:read']))
+                acls.append((
+                    Allow, str(role.user_id), ['project:read']
+                ))
 
         if self.public:
             acls.append((Allow, Everyone, ['project:read']))

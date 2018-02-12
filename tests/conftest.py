@@ -18,16 +18,12 @@ import dsnparse
 from alembic import command
 import pyramid.testing
 from armonaut.config import configure, Environment
-from armonaut.db import Session as _Session
 from sqlalchemy import event
-from sqlalchemy.orm import scoped_session
 import webtest as _webtest
 from pytest_postgresql.factories import (
     init_postgresql_database, drop_postgresql_database
 )
-
-
-Session = scoped_session(_Session)
+from .factories import Session
 
 
 @pytest.fixture(scope='session')
@@ -63,7 +59,13 @@ def database(request):
 def app_config(database):
     config = configure({
         'armonaut.env': Environment.DEVELOPMENT,
-        'database.url': database
+        'armonaut.secret': 'notasecret',
+        'celery.broker_url': 'redis://localhost:0/',
+        'celery.result_url': 'redis://localhost:0/',
+        'celery.scheduler_url': 'redis://localhost:0/',
+        'database.url': database,
+        'sessions.secret': 'notasecret',
+        'session.url': 'redis://localhost:0/'
     })
 
     # Make sure that our migrations have been run.
@@ -74,7 +76,7 @@ def app_config(database):
 
 @pytest.yield_fixture
 def db_session(app_config):
-    engine = app_config['sqlalchemy.engine']
+    engine = app_config.registry['sqlalchemy.engine']
     conn = engine.connect()
     trans = conn.begin()
     session = Session(bind=conn)

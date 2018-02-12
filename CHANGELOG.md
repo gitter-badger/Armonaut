@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added Project discovery on GitHub.
 - Added Pusher private channel authentication.
 - Added GitHub OAuth service.
 - Added Object Storage support with DigitalOcean Spaces.
 - Added Projects, Roles, and Accounts.
 - Added GitHub webhook service.
-- Added basic login template.
 - Added BasicAuth and Session-based authentication.
 - Added password reset token service.
 - Added default XSS protection via headers.
