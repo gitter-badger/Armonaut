@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-@import "node_modules/bootstrap/scss/bootstrap";
+const merge = require('webpack-merge');
+const common = require('./webpack.common');
 
-html, body {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-}
+module.exports = merge(common, {
+    devtool: 'inline-source-map'
+});
