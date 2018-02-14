@@ -13,9 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Fail fast
 set -eo pipefail
 
+# Compile static assets
+cd static/
 npm install
 npm run build
+cd ..
 
+# Apply latest database migrations
 python -m armonaut db upgrade

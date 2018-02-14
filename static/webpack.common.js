@@ -16,13 +16,13 @@
 const path = require('path');
 
 const config = {
-    entry: path.resolve(__dirname, 'js/index.jsx'),
+    entry: path.resolve(__dirname, 'js/index.js'),
     output: {
         filename: 'armonaut.bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.css', '.scss']
+        extensions: ['.js', '.css', '.scss']
     },
     module: {
         rules: [{

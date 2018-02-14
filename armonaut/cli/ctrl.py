@@ -41,6 +41,7 @@ def initdb():
 
 @ctrl.command()
 def build():
+    os.system('cd static/ && npm run build')
     os.system('docker-compose build web')
     os.system('docker-compose build worker')
 

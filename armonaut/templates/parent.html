@@ -20,12 +20,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}Armonaut{% endblock %}</title>
-    <link rel="stylesheet" href="{{ request.static_path('armonaut:static/dist/css/armonaut.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
   </head>
   <body>
   <div class="container">
-    {% block content %}{% endblock %}
+      <nav class="uk-navbar-container" uk-navbar>
+      <div class="uk-navbar-left">
+          <ul class="uk-navbar-nav">
+              <li class="uk-active uk-parent">
+                  <a href="#">Product</a>
+                  <div class="uk-navbar-dropdown">
+                      <ul class="uk-nav uk-navbar-dropdown-nav">
+                          <li><a href="#">Operating Systems</a></li>
+                          <li><a href="#">Executor Sizes</a></li>
+                          <li><a href="#">Executor Images</a></li>
+                          <li><a href="#">Build Topology</a></li>
+                          <li><a href="#">Build Stages</a></li>
+                      </ul>
+                  </div>
+              </li>
+              <li class="uk-active"><a href="/pricing">Pricing</a></li>
+              <li class="uk-active uk-parent">
+                  <a href="#">Documentation</a>
+                  <div class="uk-navbar-dropdown">
+                      <ul class="uk-nav uk-navbar-dropdown-nav">
+                          <li class="uk-nav-header">Getting Started</li>
+                          <li class="uk-nav-divider"></li>
+                          <li class="uk-nav-header">Advanced Guides</li>
+                          <li><a href="#">Configuring the Build</a></li>
+                          <li><a href="#">Environment Variables</a></li>
+                          <li><a href="#">Installing Packages</a></li>
+                          <li><a href="#">Continuous Deployment</a></li>
+                          <li class="uk-nav-divider"></li>
+                          <li class="uk-nav-header">Integrations</li>
+                          <li><a href="#">Slack</a></li>
+                          <li><a href="#">Gitter</a></li>
+                          <li class="uk-nav-divider"></li>
+                          <li class="uk-nav-header">API Reference</li>
+                      </ul>
+                  </div>
+              </li>
+              <li class="uk-active uk-parent">
+                  <a href="#">Services</a>
+                  <div class="uk-navbar-dropdown">
+                      <ul class="uk-nav uk-navbar-dropdown-nav">
+                          <li><a href="#">C/C++</a></li>
+                          <li><a href="#">Clojure</a></li>
+                          <li><a href="#">Golang</a></li>
+                          <li><a href="#">Haskell</a></li>
+                          <li><a href="#">Java</a></li>
+                          <li><a href="#">Lua</a></li>
+                          <li><a href="#">NodeJS</a></li>
+                          <li><a href="#">OCaml</a></li>
+                          <li><a href="#">Perl</a></li>
+                          <li><a href="#">PHP</a></li>
+                          <li><a href="#">Python</a></li>
+                          <li><a href="#">Ruby</a></li>
+                          <li><a href="#">Rust</a></li>
+                          <li><a href="#">Scala</a></li>
+                      </ul>
+                  </div>
+              </li>
+              <li class="uk-active uk-parent">
+                  <a href="#">Languages</a>
+                  <div class="uk-navbar-dropdown">
+                      <ul class="uk-nav uk-navbar-dropdown-nav">
+                          <li><a href="#">Cassandra</a></li>
+                          <li><a href="#">CouchDB</a></li>
+                          <li><a href="#">Docker</a></li>
+                          <li><a href="#">Elasticsearch</a></li>
+                          <li><a href="#">PostgreSQL</a></li>
+                          <li><a href="#">MariaDB</a></li>
+                          <li><a href="#">Memcached</a></li>
+                          <li><a href="#">MongoDB</a></li>
+                          <li><a href="#">MySQL</a></li>
+                          <li><a href="#">RabbitMQ</a></li>
+                          <li><a href="#">Redis</a></li>
+                          <li><a href="#">RethinkDB</a></li>
+                      </ul>
+                  </div>
+              </li>
+          </ul>
+      </div>
+      {% block content %}{% endblock %}
+  </nav>
   </div>
+  <script src="/static/armonaut.bundle.js"></script>
   </body>
 </html>

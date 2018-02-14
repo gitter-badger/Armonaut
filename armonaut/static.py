@@ -13,117 +13,18 @@
 # limitations under the License.
 
 import os
-import json
-from pyramid.path import AssetResolver
-from pyramid.httpexceptions import HTTPMethodNotAllowed
-from pyramid.response import FileResponse
-from pyramid.tweens import EXCVIEW, INGRESS
-from webob.multidict import MultiDict
-from whitenoise import WhiteNoise as _WhiteNoise
+import whitenoise
 
 
-resolver = AssetResolver()
-
-
-class WhiteNoise(_WhiteNoise):
-    config_attrs = _WhiteNoise.config_attrs + ('manifest',)
-
-    def __init__(self, *args, manifest=None, **kwargs):
-        self._manifest = None
-        self.manifest_path = (
-            resolver.resolve(manifest).abspath()
-            if manifest is not None else None
-        )
-        super().__init__(*args,  **kwargs)
-
-    @property
-    def manifest(self):
-        if self._manifest is None:
-            manifest_files = set()
-            if self.manifest_path is not None:
-                with open(self.manifest_path, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                manifest_files.update(data.values())
-
-            if not self.autorefresh:
-                self._manifest = manifest_files
-            return manifest_files
-        else:
-            return self._manifest
-
-    def is_immutable_file(self, path, url):
-        if self.manifest_path is not None:
-            manifest_dir = os.path.dirname(self.manifest_path)
-            if os.path.commonpath([self.manifest_path, path]) == manifest_dir:
-                if os.path.relpath(path, manifest_dir) in self.manifest:
-                    return True
-
-        return super().is_immutable_file(path, url)
-
-
-def whitenoise_tween_factory(handler, registry):
-    def whitenoise_tween(request):
-        wh = request.registry.whitenoise
-
-        if wh.autorefresh:
-            static_file = wh.find_file(request.path_info)
-        else:
-            static_file = wh.files.get(request.path_info)
-
-        if static_file is None:
-            return handler(request)
-
-        if request.method not in {'GET', 'HEAD'}:
-            return HTTPMethodNotAllowed()
-
-        request_headers = dict(kv for kv in request.environ.items()
-                               if kv[0].startswith('HTTP_'))
-        path, headers = static_file.get_path_and_headers(request_headers)
-        headers = MultiDict(headers)
-
-        resp = FileResponse(
-            path,
-            request=request,
-            content_type=headers.pop('Content-Type', None),
-            content_encoding=headers.pop('Content-Encoding', None)
-        )
-        resp.md5_etag()
-        resp.headers.update(headers)
-        return resp
-    return whitenoise_tween
-
-
-def whitenoise_serve_static(config, **kwargs):
-    unsupported = kwargs.keys() - set(WhiteNoise.config_attrs)
-    if unsupported:
-        raise TypeError(f'Unexpected keyword arguments: {unsupported!r}')
-
-    def register():
-        config.registry.whitenoise = WhiteNoise(None, **kwargs)
-
-    config.action(('whitenoise', 'create instance'), register)
-
-
-def whitenoise_add_files(config, path, prefix=None):
-    def add_files():
-        config.registry.whitenoise.add_files(
-            resolver.resolve(path).abspath(),
-            prefix=prefix
-        )
-
-    config.action(('whitenoise', 'add files', path, prefix), add_files)
+STATIC_DIST_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'static', 'dist'
+)
 
 
 def includeme(config):
-    config.add_directive('whitenoise_serve_static', whitenoise_serve_static)
-    config.add_directive('whitenoise_add_files', whitenoise_add_files)
-    config.add_tween(
-        'armonaut.static.whitenoise_tween_factory',
-        over=[
-            'armonaut.compression.compression_tween_factory',
-            EXCVIEW
-        ],
-        under=[
-            INGRESS
-        ]
+    config.add_wsgi_middleware(
+        whitenoise.WhiteNoise,
+        STATIC_DIST_PATH,
+        prefix='/static/'
     )
