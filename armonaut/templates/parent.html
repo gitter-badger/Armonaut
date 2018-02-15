@@ -26,16 +26,24 @@
   <div class="container">
       <nav class="uk-navbar-container" uk-navbar>
       <div class="uk-navbar-left">
+          <a class="uk-navbar-item uk-logo" href="#">Armonaut</a>
           <ul class="uk-navbar-nav">
               <li class="uk-active uk-parent">
                   <a href="#">Product</a>
                   <div class="uk-navbar-dropdown">
                       <ul class="uk-nav uk-navbar-dropdown-nav">
-                          <li><a href="#">Operating Systems</a></li>
+                          <li class="uk-nav-header">Execution</li>
+                          <li><a href="#">Executor Environments</a></li>
                           <li><a href="#">Executor Sizes</a></li>
                           <li><a href="#">Executor Images</a></li>
-                          <li><a href="#">Build Topology</a></li>
+                          <li class="uk-nav-divider"></li>
+                          <li class="uk-nav-header">Configuration</li>
+                          <li><a href="#">Flexible Topology</a></li>
                           <li><a href="#">Build Stages</a></li>
+                          <li class="uk-nav-divider"></li>
+                          <li class="uk-nav-header">Debugging</li>
+                          <li><a href="#">Vagrant Executor Environment</a></li>
+                          <li><a href="#">Vagrant Executor Environment</a></li>
                       </ul>
                   </div>
               </li>
@@ -44,7 +52,7 @@
                   <a href="#">Documentation</a>
                   <div class="uk-navbar-dropdown">
                       <ul class="uk-nav uk-navbar-dropdown-nav">
-                          <li class="uk-nav-header">Getting Started</li>
+                          <li><a href="#">Getting Started</a></li>
                           <li class="uk-nav-divider"></li>
                           <li class="uk-nav-header">Advanced Guides</li>
                           <li><a href="#">Configuring the Build</a></li>
@@ -61,7 +69,7 @@
                   </div>
               </li>
               <li class="uk-active uk-parent">
-                  <a href="#">Services</a>
+                  <a href="#">Languages</a>
                   <div class="uk-navbar-dropdown">
                       <ul class="uk-nav uk-navbar-dropdown-nav">
                           <li><a href="#">C/C++</a></li>
@@ -82,7 +90,7 @@
                   </div>
               </li>
               <li class="uk-active uk-parent">
-                  <a href="#">Languages</a>
+                  <a href="#">Services</a>
                   <div class="uk-navbar-dropdown">
                       <ul class="uk-nav uk-navbar-dropdown-nav">
                           <li><a href="#">Cassandra</a></li>
@@ -102,8 +110,18 @@
               </li>
           </ul>
       </div>
-      {% block content %}{% endblock %}
+      <div class="uk-navbar-right">
+          <ul class="uk-navbar-nav">
+              <li class="uk-active">
+                  <button class="uk-button uk-button-default">Login</button>
+              </li>
+              <li class="uk-active">
+                  <button class="uk-button uk-button-primary">Sign Up</button>
+              </li>
+          </ul>
+      </div>
   </nav>
+      {% block content %}{% endblock %}
   </div>
   <script src="/static/armonaut.bundle.js"></script>
   </body>
