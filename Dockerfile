@@ -14,8 +14,6 @@ RUN apt-get update && \
                        python3-venv \
                        postgresql \
                        libpq-dev && \
-
-    # Create symlinks that make it so you don't have to type python3 every time.
     cd /usr/bin && \
 	ln -s idle3 idle && \
 	ln -s pydoc3 pydoc && \

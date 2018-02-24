@@ -109,8 +109,10 @@ def webtest(app_config) -> _webtest.TestApp:
 
 
 @pytest.fixture
-def pyramid_request():
-    return pyramid.testing.DummyRequest()
+def pyramid_request(db_session):
+    request = pyramid.testing.DummyRequest()
+    request.db = db_session
+    return request
 
 
 @pytest.yield_fixture
