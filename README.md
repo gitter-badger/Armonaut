@@ -1,5 +1,7 @@
 # Armonaut
 
+[![Join the chat at https://gitter.im/armonaut-io/Lobby](https://badges.gitter.im/armonaut-io/Lobby.svg)](https://gitter.im/armonaut-io/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Travis](https://img.shields.io/travis/SethMichaelLarson/Armonaut/master.svg)](https://travis-ci.org/SethMichaelLarson/Armonaut)
 [![Codecov](https://img.shields.io/codecov/c/github/SethMichaelLarson/Armonaut/master.svg)](https://codecov.io/gh/SethMichaelLarson/Armonaut)
 [![Slack](https://img.shields.io/badge/slack-%23dev-brightgreen.svg)](https://armonaut.slack.com)
